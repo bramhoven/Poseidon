@@ -12,7 +12,7 @@ namespace Sertar.Helpers.Cryptography
         /// </summary>
         /// <param name="password">The password to be hashed</param>
         /// <returns>The hashed password</returns>
-        public string HashPassword(string password)
+        public static string HashPassword(string password)
         {
             byte[] saltBytes;
             new RNGCryptoServiceProvider().GetBytes(saltBytes = new byte[16]);
@@ -28,12 +28,12 @@ namespace Sertar.Helpers.Cryptography
         }
 
         /// <summary>
-        ///     Verify inputted password against hashed password.
+        ///     Validate inputted password against hashed password.
         /// </summary>
         /// <param name="password">The inputted password</param>
         /// <param name="passwordHash">The hashed password</param>
         /// <returns></returns>
-        public bool VerifyPassword(string password, string passwordHash)
+        public static bool ValidatePassword(string password, string passwordHash)
         {
             byte[] hashBytes = Convert.FromBase64String(passwordHash);
             
