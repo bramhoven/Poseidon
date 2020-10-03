@@ -9,6 +9,9 @@ namespace Sertar.BusinessLayer.Tests.Scripts
     [TestFixture]
     public class ScriptBaseTest
     {
+        /// <summary>
+        /// Test the successful import of a Yaml into a ScriptBase object.
+        /// </summary>
         [Test]
         public void LoadFromYaml_SuccessfulImport()
         {
