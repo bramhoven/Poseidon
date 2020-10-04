@@ -1,23 +1,23 @@
 ﻿namespace Sertar.BusinessLayer
 {
-    public interface IAuthorizationManager
+    public interface IAuthenticationManager
     {
         #region Methods
 
         /// <summary>
-        ///     Authorize a key.
+        ///     Authenticate a key.
         /// </summary>
         /// <param name="key">The key to authorize</param>
         /// <returns></returns>
-        bool Authorize(string key);
+        bool Authenticate(string key);
 
         /// <summary>
-        ///     Authorize an identity,
+        ///     Authenticate an identity,
         /// </summary>
         /// <param name="identifier">The identity name</param>
         /// <param name="password">The identities' password</param>
         /// <returns></returns>
-        bool AuthorizeIdentity(string identifier, string password);
+        bool AuthenticateIdentity(string identifier, string password);
 
         #endregion  
     }
