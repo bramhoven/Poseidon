@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Sertar.Models\Sertar.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+
 </Project>

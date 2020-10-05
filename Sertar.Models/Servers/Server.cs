@@ -1,11 +1,21 @@
 ﻿using System.Collections.Generic;
-using Sertar.BusinessLayer.Scripts;
+using Sertar.Models.Scripts;
 
-namespace Sertar.BusinessLayer.Servers
+namespace Sertar.Models.Servers
 {
     public class Server
     {
         #region Fields
+
+        /// <summary>
+        /// The id given to this server by the cloud provider.
+        /// </summary>
+        public string CloudId;
+
+        /// <summary>
+        /// The id given by Sertar.
+        /// </summary>
+        public string Id;
 
         /// <summary>
         ///     The installation script for this server.

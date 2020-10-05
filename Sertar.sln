@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sertar.Helpers", "Sertar.He
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sertar.Helpers.Tests", "Sertar.Helpers.Tests\Sertar.Helpers.Tests.csproj", "{F5F0C59E-7969-4FC7-B114-422FB49F7F19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sertar.API", "Sertar.API\Sertar.API.csproj", "{09D81E4F-FCFC-4CFF-9C3C-98A9A3D61C0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sertar.Api", "Sertar.API\Sertar.Api.csproj", "{09D81E4F-FCFC-4CFF-9C3C-98A9A3D61C0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

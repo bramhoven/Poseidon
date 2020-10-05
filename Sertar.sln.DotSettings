@@ -47,7 +47,7 @@
       &lt;/Entry.SortBy&gt;&#xD;
     &lt;/Entry&gt;&#xD;
     &lt;Entry DisplayName="All other members" /&gt;&#xD;
-    &lt;Entry DisplayName="Test Methods" Priority="100"&gt;&#xD;
+    &lt;Entry Priority="100" DisplayName="Test Methods"&gt;&#xD;
       &lt;Entry.Match&gt;&#xD;
         &lt;And&gt;&#xD;
           &lt;Kind Is="Method" /&gt;&#xD;
@@ -94,7 +94,7 @@
       &lt;/Entry.Match&gt;&#xD;
     &lt;/Entry&gt;&#xD;
     &lt;Entry DisplayName="All other members" /&gt;&#xD;
-    &lt;Entry DisplayName="Test Methods" Priority="100"&gt;&#xD;
+    &lt;Entry Priority="100" DisplayName="Test Methods"&gt;&#xD;
       &lt;Entry.Match&gt;&#xD;
         &lt;And&gt;&#xD;
           &lt;Kind Is="Method" /&gt;&#xD;
@@ -165,7 +165,7 @@
       &lt;/Entry&gt;&#xD;
     &lt;/Region&gt;&#xD;
     &lt;Region Name="Events"&gt;&#xD;
-      &lt;Entry DisplayName="Public Delegates" Priority="100"&gt;&#xD;
+      &lt;Entry Priority="100" DisplayName="Public Delegates"&gt;&#xD;
         &lt;Entry.Match&gt;&#xD;
           &lt;And&gt;&#xD;
             &lt;Access Is="Public" /&gt;&#xD;
@@ -274,7 +274,7 @@
           &lt;Kind Is="Type" /&gt;&#xD;
         &lt;/Entry.Match&gt;&#xD;
       &lt;/Entry&gt;&#xD;
-      &lt;Entry DisplayName="Enums" Priority="100"&gt;&#xD;
+      &lt;Entry Priority="100" DisplayName="Enums"&gt;&#xD;
         &lt;Entry.Match&gt;&#xD;
           &lt;Kind Is="Enum" /&gt;&#xD;
         &lt;/Entry.Match&gt;&#xD;
@@ -287,4 +287,5 @@
       &lt;Entry DisplayName="All other members" /&gt;&#xD;
     &lt;/Region&gt;&#xD;
   &lt;/TypePattern&gt;&#xD;
-&lt;/Patterns&gt;</s:String></wpf:ResourceDictionary>
+&lt;/Patterns&gt;</s:String>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EAlwaysTreatStructAsNotReorderableMigration/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
