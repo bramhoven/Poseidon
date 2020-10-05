@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Sertar.Models.Scripts;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Sertar.BusinessLayer.Scripts
+namespace Sertar.Models.Scripts
 {
     public class ScriptBase
     {
@@ -16,7 +17,7 @@ namespace Sertar.BusinessLayer.Scripts
         /// <summary>
         ///     The steps this script has.
         /// </summary>
-        public List<ScriptStepBase> Steps;
+        public List<ScriptStep> Steps;
 
         #endregion
 
