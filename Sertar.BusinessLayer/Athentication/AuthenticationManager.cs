@@ -35,7 +35,7 @@ namespace Sertar.BusinessLayer
         /// <returns></returns>
         public bool Authenticate(string key)
         {
-            _authenticationDal.Authenticate(key);
+            return _authenticationDal.Authenticate(key);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Sertar.BusinessLayer
         /// <returns></returns>
         public bool AuthenticateIdentity(string identifier, string password)
         {
-            _authenticationDal.AuthenticateIdentity(identifier, password);
+            return _authenticationDal.AuthenticateIdentity(identifier, password);
         }
 
         #endregion

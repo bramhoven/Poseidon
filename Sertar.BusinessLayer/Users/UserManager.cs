@@ -9,7 +9,7 @@ namespace Sertar.BusinessLayer.Users
         /// <summary>
         /// The authorization manager to user to authenticate the user.
         /// </summary>
-        private readonly IAuthenticationManager _authenticationManager;
+        private readonly AuthenticationManager _authenticationManager;
 
         /// <summary>
         /// The user data access layer object.
@@ -20,7 +20,7 @@ namespace Sertar.BusinessLayer.Users
 
         #region Constructors
 
-        public UserManager(IUserDal userDal, IAuthenticationManager authenticationManager)
+        public UserManager(IUserDal userDal, AuthenticationManager authenticationManager)
         {
             _userDal = userDal;
             _authenticationManager = authenticationManager;
@@ -37,7 +37,7 @@ namespace Sertar.BusinessLayer.Users
         /// <param name="password">The password</param>
         public bool Login(string username, string password)
         {
-            return _authenticationManager.AuthorizeIdentity(username, password);
+            return _authenticationManager.AuthenticateIdentity(username, password);
         }
 
         #endregion
