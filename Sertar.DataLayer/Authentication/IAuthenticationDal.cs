@@ -1,6 +1,6 @@
-﻿namespace Sertar.BusinessLayer
+﻿namespace Sertar.DataLayer.Authentication
 {
-    public interface IAuthenticationManager
+    public interface IAuthenticationDal
     {
         #region Methods
 
@@ -19,6 +19,6 @@
         /// <returns></returns>
         bool AuthenticateIdentity(string identifier, string password);
 
-        #endregion  
+        #endregion
     }
 }
