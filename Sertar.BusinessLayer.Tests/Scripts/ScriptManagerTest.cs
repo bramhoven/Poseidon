@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using Sertar.BusinessLayer.Scripts;
+using Sertar.Models.Scripts;
 
 namespace Sertar.BusinessLayer.Tests.Scripts
 {
     [TestFixture]
-    public class ScriptBaseTest
+    public class ScriptManagerTest
     {
         /// <summary>
         /// Test the successful import of a Yaml into a ScriptBase object.
@@ -26,7 +27,7 @@ namespace Sertar.BusinessLayer.Tests.Scripts
                     - Second step first command 
                     - Second step second command
             ";
-            var script = ScriptBase.LoadFromYaml(yaml);
+            var script = ScriptManager.LoadFromYaml(yaml);
 
             Assert.IsNotNull(script, "Script object is null");
             Assert.AreEqual(script.Name, "Test Script");
