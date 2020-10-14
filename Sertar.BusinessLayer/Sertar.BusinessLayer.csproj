@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sertar.DataLayer\Sertar.DataLayer.csproj" />
+    <ProjectReference Include="..\Sertar.Helpers\Sertar.Helpers.csproj" />
     <ProjectReference Include="..\Sertar.Models\Sertar.Models.csproj" />
   </ItemGroup>
 
