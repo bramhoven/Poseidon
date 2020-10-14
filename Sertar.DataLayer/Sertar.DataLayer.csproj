@@ -2,7 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <UserSecretsId>1ec754a0-db6c-4037-9694-8c4855b5dc7c</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sertar.Models\Sertar.Models.csproj" />

@@ -8,12 +8,12 @@ namespace Sertar.Models.Servers
         #region Fields
 
         /// <summary>
-        /// The id given to this server by the cloud provider.
+        ///     The id given to this server by the cloud provider.
         /// </summary>
         public string CloudId;
 
         /// <summary>
-        /// The id given by Sertar.
+        ///     The id given by Sertar.
         /// </summary>
         public string Id;
 
