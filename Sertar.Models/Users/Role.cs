@@ -1,20 +1,25 @@
 ﻿using System.Collections.Generic;
 
-namespace Sertar.BusinessLayer.Users
+namespace Sertar.Models.Users
 {
     public class Role
     {
-        #region Fields
+        #region Properties
+
+        /// <summary>
+        ///     The Id of this role.
+        /// </summary>
+        public int Id { get; set; }
 
         /// <summary>
         ///     The name of this role.
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
 
         /// <summary>
         ///     The permissions that this role has.
         /// </summary>
-        public List<Permissions> Permissions;
+        public List<RolePermission> Permissions { get; set; }
 
         #endregion
     }

@@ -31,11 +31,11 @@ namespace Sertar.Helpers.Cryptography
         ///     Validate inputted password against hashed password.
         /// </summary>
         /// <param name="password">The inputted password</param>
-        /// <param name="passwordHash">The hashed password</param>
+        /// <param name="hashedPassword">The hashed password</param>
         /// <returns></returns>
-        public static bool ValidatePassword(string password, string passwordHash)
+        public static bool ValidatePassword(string password, string hashedPassword)
         {
-            byte[] hashBytes = Convert.FromBase64String(passwordHash);
+            byte[] hashBytes = Convert.FromBase64String(hashedPassword);
             
             byte[] salt = new byte[16];
             Array.Copy(hashBytes, 0, salt, 0, 16);

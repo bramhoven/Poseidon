@@ -1,4 +1,4 @@
-﻿using Sertar.BusinessLayer.Users;
+﻿using Sertar.Models.Users;
 
 namespace Sertar.DataLayer.Users
 {
@@ -12,6 +12,7 @@ namespace Sertar.DataLayer.Users
         /// <param name="user">The user to delete</param>
         /// <returns></returns>
         bool DeleteUser(User user);
+
 
         /// <summary>
         ///     Get user by username.
