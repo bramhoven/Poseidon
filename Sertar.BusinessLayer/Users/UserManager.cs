@@ -1,4 +1,5 @@
-﻿using Sertar.BusinessLayer.Authentication;
+﻿using System.Security.Principal;
+using Sertar.BusinessLayer.Authentication;
 using Sertar.DataLayer.Users;
 using Sertar.Models.Users;
 
@@ -37,7 +38,7 @@ namespace Sertar.BusinessLayer.Users
         /// </summary>
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
-        public bool Login(string username, string password)
+        public IIdentity Login(string username, string password)
         {
             return _authenticationManager.AuthenticateIdentity(username, password);
         }

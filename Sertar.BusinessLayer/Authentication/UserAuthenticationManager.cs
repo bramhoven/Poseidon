@@ -1,6 +1,9 @@
-﻿using Sertar.BusinessLayer.Users;
+﻿using System.Security.Claims;
+using System.Security.Principal;
+using Sertar.BusinessLayer.Users;
 using Sertar.DataLayer.Authentication;
 using Sertar.Helpers.Cryptography;
+using Sertar.Models.Security;
 
 namespace Sertar.BusinessLayer.Authentication
 {
@@ -17,8 +20,7 @@ namespace Sertar.BusinessLayer.Authentication
 
         #region Constructors
 
-        /// <summary>
-        ///     Initialize new instance of <see cref="Sertar.BusinessLayer.Authentication.AuthenticationManager" />.
+        /// <summary> 
         /// </summary>
         /// <param name="userManager">The user manager to use</param>
         public UserAuthenticationManager(UserManager userManager)
@@ -30,10 +32,13 @@ namespace Sertar.BusinessLayer.Authentication
 
         #region Methods
 
-        public override bool AuthenticateIdentity(string identifier, string password)
+        public override IIdentity AuthenticateIdentity(string identifier, string password)
         {
             var user = _userManager.GetUser(identifier);
-            return user != null && PasswordHelper.ValidatePassword(password, user.Password);
+            if (user != null && PasswordHelper.ValidatePassword(password, user.Password))
+                return new UserIdentity("UserLogin", user);
+
+            return null;
         }
 
         #endregion
