@@ -2,17 +2,15 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sertar.DataLayer.Contexts;
+using Sertar.DataLayer.Contexts.UserContext;
 
-namespace Sertar.Migrations.Migrations
+namespace Sertar.Migrations.Mysql.Migrations
 {
     [DbContext(typeof(MysqlUserContext))]
-    [Migration("20201014210838_UserInitialMigration")]
-    partial class UserInitialMigration
+    partial class MysqlUserContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

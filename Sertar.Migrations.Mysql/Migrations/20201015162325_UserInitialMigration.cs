@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Sertar.Migrations.Migrations
+namespace Sertar.Migrations.Mysql.Migrations
 {
     public partial class UserInitialMigration : Migration
     {
