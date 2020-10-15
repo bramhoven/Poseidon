@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Principal;
 
 namespace Sertar.BusinessLayer.Authentication
 {
@@ -11,7 +12,7 @@ namespace Sertar.BusinessLayer.Authentication
         /// </summary>
         /// <param name="key">The key to authorize</param>
         /// <returns></returns>
-        public virtual bool Authenticate(string key)
+        public virtual IIdentity Authenticate(string key)
         {
             throw new NotImplementedException("Authenticate method has not been implemented");
         }
@@ -22,7 +23,7 @@ namespace Sertar.BusinessLayer.Authentication
         /// <param name="identifier">The identity name</param>
         /// <param name="password">The identities' password</param>
         /// <returns></returns>
-        public virtual bool AuthenticateIdentity(string identifier, string password)
+        public virtual IIdentity AuthenticateIdentity(string identifier, string password)
         {
             throw new NotImplementedException("AuthenticateIdentity method has not been implemented");
         }
