@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Security.Principal;
 using Sertar.BusinessLayer.Authentication;
 using Sertar.DataLayer.Users;
 using Sertar.Models.Users;
@@ -50,9 +51,15 @@ namespace Sertar.BusinessLayer.Users
         /// <returns></returns>
         public bool RegisterUser(User user)
         {
-            if (GetUser(user.Username) == null)
-                return _userDal.InsertUser(user);
+            try
+            {
+                if (GetUser(user.Username) == null)
+                    _userDal.InsertUser(user);
+            }
+            catch (Exception exc)
+            {
 
+            }
             return false;
         }
 

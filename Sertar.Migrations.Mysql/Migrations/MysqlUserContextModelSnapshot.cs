@@ -3,9 +3,9 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sertar.DataLayer.Contexts;
+using Sertar.DataLayer.Contexts.UserContext;
 
-namespace Sertar.Migrations.Migrations
+namespace Sertar.Migrations.Mysql.Migrations
 {
     [DbContext(typeof(MysqlUserContext))]
     partial class MysqlUserContextModelSnapshot : ModelSnapshot

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Sertar.DataLayer.Contexts;
+using Sertar.DataLayer.Contexts.UserContext;
 
 namespace Sertar.API
 {
@@ -54,13 +54,19 @@ namespace Sertar.API
         // This methods gets called by the ConfigureServices function. Use this to setup EntityFramework.
         private void ConfigureDatabases(IServiceCollection services)
         {
-            switch (Configuration.GetValue<string>("DatabaseTypes.UserDatabase", "mysql"))
+            switch (Configuration.GetValue<string>("DatabaseTypes:UserDatabase", "mysql"))
             {
+                case "postgres":
+                {
+                    services.AddDbContext<PostgresUserContext>(options =>
+                        options.UseNpgsql(Configuration.GetConnectionString("UserDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Postgres")));
+                    break;
+                }
                 case "mysql":
                 {
                     services.AddDbContext<MysqlUserContext>(options =>
-                        options.UseMySql(Configuration.GetConnectionString("UserDatabase"), b => b.MigrationsAssembly("Sertar.Migrations")));
-                        break;
+                        options.UseMySql(Configuration.GetConnectionString("UserDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Mysql")));
+                    break;
                 }
             }
         }
