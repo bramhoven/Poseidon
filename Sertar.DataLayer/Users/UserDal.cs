@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using NLog;
 using Sertar.DataLayer.Contexts.UserContext;
 using Sertar.Models.Users;
 
@@ -13,7 +13,7 @@ namespace Sertar.DataLayer.Users
         /// <summary>
         ///     The logger.
         /// </summary>
-        private readonly ILogger<UserDal> _logger;
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     The user database context.
@@ -47,7 +47,7 @@ namespace Sertar.DataLayer.Users
             }
             catch (Exception e)
             {
-                _logger.LogError("Error on deleting user", e);
+                _logger.Error(e);
                 return false;
             }
         }
@@ -67,7 +67,7 @@ namespace Sertar.DataLayer.Users
             }
             catch (Exception e)
             {
-                _logger.LogError("Error on inserting user", e);
+                _logger.Error(e);
                 return false;
             }
         }
@@ -82,7 +82,7 @@ namespace Sertar.DataLayer.Users
             }
             catch (Exception e)
             {
-                _logger.LogError("Error on updating user", e);
+                _logger.Error(e);
                 return false;
             }
         }

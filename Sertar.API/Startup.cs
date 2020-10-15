@@ -11,12 +11,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using Sertar.DataLayer.Contexts.UserContext;
+using Sertar.Helpers.Logging;
+using ILogger = NLog.ILogger;
 
 namespace Sertar.API
 {
     public class Startup
     {
+
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +33,7 @@ namespace Sertar.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            _logger.Info("Configuring Web API");
             ConfigureDatabases(services);
             services.AddControllers();
         }

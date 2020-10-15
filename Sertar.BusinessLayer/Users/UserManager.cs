@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Principal;
+using NLog;
 using Sertar.BusinessLayer.Authentication;
 using Sertar.DataLayer.Users;
 using Sertar.Models.Users;
@@ -14,6 +15,11 @@ namespace Sertar.BusinessLayer.Users
         ///     The authorization manager to user to authenticate the user.
         /// </summary>
         private readonly AuthenticationManager _authenticationManager;
+
+        /// <summary>
+        ///     The logger.
+        /// </summary>
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     The user data access layer object.
@@ -35,6 +41,16 @@ namespace Sertar.BusinessLayer.Users
         #region Methods
 
         /// <summary>
+        ///     Get user by username.
+        /// </summary>
+        /// <param name="username">The username of the user</param>
+        /// <returns>The user if found, else null</returns>
+        public User GetUser(string username)
+        {
+            return _userDal.GetUserByUsername(username);
+        }
+
+        /// <summary>
         ///     Login a user.
         /// </summary>
         /// <param name="username">The username</param>
@@ -54,23 +70,16 @@ namespace Sertar.BusinessLayer.Users
             try
             {
                 if (GetUser(user.Username) == null)
+                {
                     _userDal.InsertUser(user);
+                }
             }
-            catch (Exception exc)
+            catch (Exception e)
             {
-
+                _logger.Error(e);
             }
-            return false;
-        }
 
-        /// <summary>
-        /// Get user by username.
-        /// </summary>
-        /// <param name="username">The username of the user</param>
-        /// <returns>The user if found, else null</returns>
-        public User GetUser(string username)
-        {
-            return _userDal.GetUserByUsername(username);
+            return false;
         }
 
         #endregion
