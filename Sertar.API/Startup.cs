@@ -1,42 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
 using Sertar.DataLayer.Contexts.UserContext;
-using Sertar.Helpers.Logging;
-using ILogger = NLog.ILogger;
+using Sertar.Helpers.Settings;
 
 namespace Sertar.API
 {
     public class Startup
     {
+        #region Fields
 
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private SettingsHelper _settingsHelper;
+
+        #endregion
+
+        #region Properties
+
+        public IConfiguration Configuration { get; }
+
+        #endregion
+
+        #region Constructors
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _settingsHelper = new SettingsHelper(configuration);
         }
 
-        public IConfiguration Configuration { get; }
+        #endregion
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            _logger.Info("Configuring Web API");
-            ConfigureDatabases(services);
-            services.AddControllers();
-        }
+        #region Methods
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -52,30 +49,38 @@ namespace Sertar.API
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            ConfigureDatabases(services);
+            services.AddControllers();
         }
 
         // This methods gets called by the ConfigureServices function. Use this to setup EntityFramework.
         private void ConfigureDatabases(IServiceCollection services)
         {
-            switch (Configuration.GetValue<string>("DatabaseTypes:UserDatabase", "mysql"))
+            switch (Configuration.GetValue("DatabaseTypes:UserDatabase", "mysql"))
             {
                 case "postgres":
                 {
                     services.AddDbContext<PostgresUserContext>(options =>
-                        options.UseNpgsql(Configuration.GetConnectionString("UserDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Postgres")));
+                        options.UseNpgsql(Configuration.GetConnectionString("UserDatabase"),
+                            b => b.MigrationsAssembly("Sertar.Migrations.Postgres")));
                     break;
                 }
                 case "mysql":
                 {
                     services.AddDbContext<MysqlUserContext>(options =>
-                        options.UseMySql(Configuration.GetConnectionString("UserDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Mysql")));
+                        options.UseMySql(Configuration.GetConnectionString("UserDatabase"),
+                            b => b.MigrationsAssembly("Sertar.Migrations.Mysql")));
                     break;
                 }
             }
         }
+
+        #endregion
     }
 }
