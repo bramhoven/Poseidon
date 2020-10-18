@@ -4,66 +4,59 @@ namespace Sertar.Models.Cloud
 {
     public class InstanceSizeBase : IInstanceSize
     {
-        #region Fields
+        #region Properties
 
         /// <summary>
         ///     The amount of cpu's.
         /// </summary>
-        public int Cpu;
+        public int Cpu { get; internal set; }
 
         /// <summary>
         ///     The amount of gpu's.
         /// </summary>
-        public int Gpu;
+        public int Gpu { get; internal set; }
+
+        /// <summary>
+        ///     The id of the size.
+        /// </summary>
+        public string Id { get; internal set; }
+
+        /// <summary>
+        ///     The name of the size.
+        /// </summary>
+        public string Name { get; internal set; }
 
         /// <summary>
         ///     The amount of ram.
         /// </summary>
-        public int Ram;
+        public int Ram { get; internal set; }
+
+        /// <summary>
+        ///     The region where this size can be used.
+        /// </summary>
+        public string Region { get; internal set; }
 
         /// <summary>
         ///     The amount of storage.
         /// </summary>
-        public int Storage;
+        public int Storage { get; internal set; }
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        ///     Initialize the InstanceSizeBase object.
+        ///     Initialize a new instance of <see cref="Sertar.Models.Cloud.InstanceSizeBase"/>
         /// </summary>
-        /// <param name="cpu">The amount of cpu's</param>
-        /// <param name="ram">The amount of ram</param>
-        /// <param name="storage">The amount of storage</param>
-        public InstanceSizeBase(int cpu, int ram, int storage)
+        protected InstanceSizeBase()
         {
-            Cpu = cpu;
-            Ram = ram;
-            Storage = storage;
-        }
-
-        /// <summary>
-        ///     Initialize the InstanceSizeBase object.
-        /// </summary>
-        /// <param name="cpu">The amount of cpu's</param>
-        /// <param name="ram">The amount of ram</param>
-        /// <param name="storage">The amount of storage</param>
-        /// <param name="gpu">The amount of gpu's</param>
-        public InstanceSizeBase(int cpu, int ram, int storage, int gpu) : this(cpu, ram, storage)
-        {
-            Gpu = gpu;
         }
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        ///     Get the size definition string for the specific cloud provider.
-        /// </summary>
-        /// <returns>The size definition string</returns>
-        public string GetSizeDefinition()
+        public virtual string GetSizeDefinition()
         {
             throw new NotImplementedException("This function has not been implemented.");
         }
