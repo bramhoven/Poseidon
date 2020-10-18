@@ -9,6 +9,7 @@ using Sertar.DataLayer.Cloud.Models.Ovh;
 using Sertar.Helpers.Settings;
 using Sertar.Models.Cloud;
 using Sertar.Models.Cloud.Ovh;
+using Sertar.Models.Servers;
 
 namespace Sertar.DataLayer.Cloud
 {
@@ -52,7 +53,7 @@ namespace Sertar.DataLayer.Cloud
 
         #region Methods
 
-        public bool CreateServer(string name, string size, string image, string region)
+        public Server CreateServer(string name, string size, string image, string region)
         {
             if(string.IsNullOrWhiteSpace(SettingsHelper.OvhProject))
                 throw new ArgumentException(nameof(SettingsHelper.OvhProject));
@@ -68,13 +69,19 @@ namespace Sertar.DataLayer.Cloud
 
             try
             {
-                var result = _client.PostAsync(url, requestData).GetAwaiter().GetResult();
-                return true;
+                var ovhServer = _client.PostAsync<OvhServer>(url, requestData).GetAwaiter().GetResult();
+                var server = new Server()
+                {
+                    CloudId = ovhServer.Id,
+                    Name = ovhServer.Name
+                };
+
+                return server;
             }
             catch (Exception e)
             {
                 _logger.Error(e);
-                return false;
+                return null;
             }
         }
 

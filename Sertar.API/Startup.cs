@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sertar.DataLayer.Contexts.ServerContext;
 using Sertar.DataLayer.Contexts.UserContext;
+using Sertar.DataLayer.Servers;
 using Sertar.Helpers.Settings;
 
 namespace Sertar.API
@@ -56,6 +58,9 @@ namespace Sertar.API
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureDatabases(services);
+
+            services.AddScoped<IServerDal, ServerDal>();
+
             services.AddControllers();
         }
 
@@ -66,16 +71,32 @@ namespace Sertar.API
             {
                 case "postgres":
                 {
-                    services.AddDbContext<PostgresUserContext>(options =>
+                    services.AddDbContext<DbUserContext, PostgresUserContext>(options =>
                         options.UseNpgsql(Configuration.GetConnectionString("UserDatabase"),
                             b => b.MigrationsAssembly("Sertar.Migrations.Postgres")));
                     break;
                 }
                 case "mysql":
                 {
-                    services.AddDbContext<MysqlUserContext>(options =>
+                    services.AddDbContext<DbUserContext, MysqlUserContext>(options =>
                         options.UseMySql(Configuration.GetConnectionString("UserDatabase"),
                             b => b.MigrationsAssembly("Sertar.Migrations.Mysql")));
+                    break;
+                }
+            }
+
+            switch (Configuration.GetValue<string>("DatabaseTypes:ServerDatabase", "mysql"))
+            {
+                case "postgres":
+                {
+                    services.AddDbContext<DbServerContext, PostgresServerContext>(options =>
+                        options.UseNpgsql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Postgres")));
+                    break;
+                }
+                case "mysql":
+                {
+                    services.AddDbContext<DbServerContext, MysqlServerContext>(options =>
+                        options.UseMySql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Mysql")));
                     break;
                 }
             }

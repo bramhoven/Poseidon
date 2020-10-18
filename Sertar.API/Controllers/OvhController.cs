@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Sertar.API.Models.RequestData;
 using Sertar.BusinessLayer.Cloud;
+using Sertar.BusinessLayer.Servers;
 using Sertar.DataLayer.Cloud;
+using Sertar.DataLayer.Contexts.ServerContext;
+using Sertar.DataLayer.Servers;
 using Sertar.Models.Cloud;
 
 namespace Sertar.Api.Controllers
@@ -14,14 +17,16 @@ namespace Sertar.Api.Controllers
         #region Fields
 
         private readonly CloudManager _cloudManager;
+        private readonly ServerManager _serverManager;
 
         #endregion
 
         #region Constructors
 
-        public OvhController()
+        public OvhController(IServerDal serverDal)
         {
             _cloudManager = new CloudManager(new OvhCloudDal());
+            _serverManager = new ServerManager(serverDal);
         }
 
         #endregion
@@ -37,10 +42,13 @@ namespace Sertar.Api.Controllers
         [HttpPost]
         public ActionResult<object> CreateServer(ServerCreateData serverCreateData)
         {
-            if (_cloudManager.CreateServer(serverCreateData.Name, serverCreateData.Size, serverCreateData.Image,
-                serverCreateData.Region))
+            var server = _cloudManager.CreateServer(serverCreateData.Name, serverCreateData.Size,
+                serverCreateData.Image,
+                serverCreateData.Region);
+            if (server != null)
             {
-                return Ok(new {Message = "Server has been created"});
+                _serverManager.InsertServer(server);
+                return Ok(server);
             }
 
             return BadRequest(new {Message = "Failed to create server"});
