@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sertar.Models.Cloud;
+using Sertar.Models.Servers;
 
 namespace Sertar.DataLayer.Cloud
 {
@@ -15,7 +16,7 @@ namespace Sertar.DataLayer.Cloud
         /// <param name="image">The image of the server</param>
         /// <param name="region">The region where the server should be deployed</param>
         /// <returns>Whether request was successful</returns>
-        bool CreateServer(string name, string size, string image, string region);
+        Server CreateServer(string name, string size, string image, string region);
 
         /// <summary>
         ///     Get all available images for provider.

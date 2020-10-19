@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sertar.Models.Scripts
 {
@@ -7,14 +9,20 @@ namespace Sertar.Models.Scripts
         #region Fields
 
         /// <summary>
+        /// Id of the ScriptBase.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         ///     The name of this script.
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
 
         /// <summary>
         ///     The steps this script has.
         /// </summary>
-        public List<ScriptStep> Steps;
+        [NotMapped]
+        public List<ScriptStep> Steps { get; set; }
 
         #endregion
     }

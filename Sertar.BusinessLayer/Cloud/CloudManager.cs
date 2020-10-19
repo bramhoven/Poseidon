@@ -2,6 +2,7 @@
 using System.Linq;
 using Sertar.DataLayer.Cloud;
 using Sertar.Models.Cloud;
+using Sertar.Models.Servers;
 
 namespace Sertar.BusinessLayer.Cloud
 {
@@ -37,8 +38,8 @@ namespace Sertar.BusinessLayer.Cloud
         /// <param name="name">The name of the server</param>
         /// <param name="size">The size of the sever</param>
         /// <param name="region">The region where the server should be deployed</param>
-        /// <returns>Whether request was successful</returns>
-        public bool CreateServer(string name, string size, string image, string region)
+        /// <returns>The server</returns>
+        public Server CreateServer(string name, string size, string image, string region)
         {
             return _cloudDal.CreateServer(name, size, image, region);
         }

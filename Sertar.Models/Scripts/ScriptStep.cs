@@ -11,7 +11,7 @@ namespace Sertar.Models.Scripts
         /// <summary>
         /// The commands that will be executed in this step.
         /// </summary>
-        public List<string> Commands;
+        public List<string> Commands { get; set; }
 
         /// <summary>
         /// The name of this step.
