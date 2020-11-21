@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sertar.Models.Cloud.Ovh
 {
@@ -12,5 +13,6 @@ namespace Sertar.Models.Cloud.Ovh
         public OvhFlavor Flavor { get; set; }
         public OvhImage Image { get; set; }
         public string PlanCode { get; set; }
+        public ICollection<OvhIpAddress> IpAddresses { get; set; }
     }
 }

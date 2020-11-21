@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sertar.DataLayer.Cloud;
 using Sertar.Models.Cloud;
@@ -45,6 +46,26 @@ namespace Sertar.BusinessLayer.Cloud
         }
 
         /// <summary>
+        ///     Get all available sizes for provider.
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<InstanceImageBase> GetAvailableImages()
+        {
+            return _cloudDal.GetAvailableImages();
+        }
+
+        /// <summary>
+        ///     Get all available sizes for provider by region.
+        /// </summary>
+        /// <param name="region">The region to filter by</param>
+        /// <returns></returns>
+        public ICollection<InstanceImageBase> GetAvailableImages(string region)
+        {
+            return _cloudDal.GetAvailableImages().Where(image => image.Region.ToLower().Equals(region.ToLower()))
+                .ToList();
+        }
+
+        /// <summary>
         ///     Get available sizes for cloud provider.
         /// </summary>
         /// <returns>The sizes</returns>
@@ -64,22 +85,13 @@ namespace Sertar.BusinessLayer.Cloud
         }
 
         /// <summary>
-        ///     Get all available sizes for provider.
+        ///     Gets a server from cloud provider.
         /// </summary>
+        /// <param name="serverId">The cloud server id</param>
         /// <returns></returns>
-        public ICollection<InstanceImageBase> GetAvailableImages()
+        public Server GetServer(string serverId)
         {
-            return _cloudDal.GetAvailableImages();
-        }
-
-        /// <summary>
-        ///     Get all available sizes for provider by region.
-        /// </summary>
-        /// <param name="region">The region to filter by</param>
-        /// <returns></returns>
-        public ICollection<InstanceImageBase> GetAvailableImages(string region)
-        {
-            return _cloudDal.GetAvailableImages().Where(image => image.Region.ToLower().Equals(region.ToLower())).ToList();
+            return _cloudDal.GetServer(serverId);
         }
 
         #endregion

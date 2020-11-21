@@ -30,6 +30,13 @@ namespace Sertar.DataLayer.Cloud
         /// <returns></returns>
         ICollection<InstanceSizeBase> GetAvailableSizes();
 
+        /// <summary>
+        ///     Gets a server from the cloud provider.
+        /// </summary>
+        /// <param name="serverId">The cloud server id</param>
+        /// <returns></returns>
+        Server GetServer(string serverId);
+
         #endregion
     }
 }

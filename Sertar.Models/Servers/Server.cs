@@ -17,7 +17,7 @@ namespace Sertar.Models.Servers
         /// <summary>
         ///     The id given by Sertar.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         /// <summary>
         ///     The installation script for this server.

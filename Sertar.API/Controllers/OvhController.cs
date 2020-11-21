@@ -55,6 +55,22 @@ namespace Sertar.Api.Controllers
         }
 
         /// <summary>
+        ///     Gets an server in the ovh cloud.
+        /// </summary>
+        /// <param name="serverId">The server id</param>
+        /// <returns></returns>
+        [Route("servers/{serverId}")]
+        [HttpGet]
+        public ActionResult<object> GetServer(string serverId)
+        {
+            var server = _cloudManager.GetServer(serverId);
+            if (server != null)
+                return Ok(server);
+
+            return BadRequest(new { Message = "Failed to get server" });
+        }
+
+        /// <summary>
         ///     Getting ovh's available sizes.
         /// </summary>
         /// <returns></returns>

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using NLog;
 using Ovh.Api;
 using Sertar.DataLayer.Cloud.Models.Ovh;
+using Sertar.DataLayer.Mappers;
 using Sertar.Helpers.Settings;
 using Sertar.Models.Cloud;
 using Sertar.Models.Cloud.Ovh;
@@ -64,7 +65,8 @@ namespace Sertar.DataLayer.Cloud
                 FlavorId = size,
                 Name = name,
                 ImageId = image,
-                Region = region
+                Region = region,
+                MonthlyBilling = true
             };
 
             try
@@ -114,6 +116,22 @@ namespace Sertar.DataLayer.Cloud
             {
                 _logger.Error(e);
                 return new List<InstanceSizeBase>();
+            }
+        }
+
+        public Server GetServer(string serverId)
+        {
+            var url = $"/cloud/project/{SettingsHelper.OvhProject}/instance/{serverId}";
+
+            try
+            {
+                var server = _client.GetAsync<OvhServer>(url).GetAwaiter().GetResult();
+                return OvhMapper.MapOvhServerToServer(server);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
             }
         }
 

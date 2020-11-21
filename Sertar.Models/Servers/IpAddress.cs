@@ -1,25 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sertar.Models.Servers
 {
     public class IpAddress
     {
-        /// <summary>
-        /// The id of the ip address.
-        /// </summary>
-        public Guid Id { get; set; }
+        #region Properties
 
         /// <summary>
-        /// The optional name of the ip address.
+        ///     The id of the ip address.
+        /// </summary>
+        public Guid? Id { get; set; }
+
+        /// <summary>
+        ///     The ip address.
+        /// </summary>
+        public string Ip { get; set; }
+
+        /// <summary>
+        ///     The optional name of the ip address.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// The ip address.
+        ///     The ip version.
         /// </summary>
-        public string Ip { get; set; }
+        public int Version { get; set; }
 
+        #endregion
     }
 }
