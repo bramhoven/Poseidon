@@ -1,6 +1,7 @@
 ﻿using NLog;
 using Sertar.DataLayer.Servers;
 using Sertar.Models.Servers;
+using System;
 
 namespace Sertar.BusinessLayer.Servers
 {
@@ -34,6 +35,26 @@ namespace Sertar.BusinessLayer.Servers
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Get server by GUID.
+        /// </summary>
+        /// <param name="id">The id of the server</param>
+        /// <returns></returns>
+        public Server GetServer(Guid id)
+        {
+            return _serverDal.GetServer(id);
+        }
+
+        /// <summary>
+        /// Get server by id as string.
+        /// </summary>
+        /// <param name="id">The id of the server as string</param>
+        /// <returns></returns>
+        public Server GetServer(string id)
+        {
+            return _serverDal.GetServer(Guid.Parse(id));
+        }
 
         /// <summary>
         ///     Deletes the server.

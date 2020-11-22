@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Newtonsoft.Json;
 using NLog;
 using Ovh.Api;
 using Sertar.DataLayer.Cloud.Models.Ovh;
@@ -38,13 +36,16 @@ namespace Sertar.DataLayer.Cloud
         public OvhCloudDal()
         {
             if (string.IsNullOrWhiteSpace(SettingsHelper.OvhApplicationKey))
-                throw new ArgumentException("The ApplicationKey is not set in the configurations.", nameof(SettingsHelper.OvhApplicationKey));
+                throw new ArgumentException("The ApplicationKey is not set in the configurations.",
+                    nameof(SettingsHelper.OvhApplicationKey));
 
             if (string.IsNullOrWhiteSpace(SettingsHelper.OvhApplicationSecret))
-                throw new ArgumentException("The ApplicationSecret is not set in the configurations.", nameof(SettingsHelper.OvhApplicationSecret));
+                throw new ArgumentException("The ApplicationSecret is not set in the configurations.",
+                    nameof(SettingsHelper.OvhApplicationSecret));
 
             if (string.IsNullOrWhiteSpace(SettingsHelper.OvhCustomerKey))
-                throw new ArgumentException("The CustomerKey is not set in the configurations.", nameof(SettingsHelper.OvhCustomerKey));
+                throw new ArgumentException("The CustomerKey is not set in the configurations.",
+                    nameof(SettingsHelper.OvhCustomerKey));
 
             _client = new Client("ovh-eu", SettingsHelper.OvhApplicationKey, SettingsHelper.OvhApplicationSecret,
                 SettingsHelper.OvhCustomerKey);
@@ -56,11 +57,11 @@ namespace Sertar.DataLayer.Cloud
 
         public Server CreateServer(string name, string size, string image, string region)
         {
-            if(string.IsNullOrWhiteSpace(SettingsHelper.OvhProject))
+            if (string.IsNullOrWhiteSpace(SettingsHelper.OvhProject))
                 throw new ArgumentException(nameof(SettingsHelper.OvhProject));
 
             var url = $"/cloud/project/{SettingsHelper.OvhProject}/instance";
-            var requestData = new OvhInstanceCreationRequestData()
+            var requestData = new OvhInstanceCreationRequestData
             {
                 FlavorId = size,
                 Name = name,
@@ -72,7 +73,7 @@ namespace Sertar.DataLayer.Cloud
             try
             {
                 var ovhServer = _client.PostAsync<OvhServer>(url, requestData).GetAwaiter().GetResult();
-                var server = new Server()
+                var server = new Server
                 {
                     CloudId = ovhServer.Id,
                     Name = ovhServer.Name
@@ -86,6 +87,7 @@ namespace Sertar.DataLayer.Cloud
                 return null;
             }
         }
+
 
         public ICollection<InstanceImageBase> GetAvailableImages()
         {
@@ -127,6 +129,23 @@ namespace Sertar.DataLayer.Cloud
             {
                 var server = _client.GetAsync<OvhServer>(url).GetAwaiter().GetResult();
                 return OvhMapper.MapOvhServerToServer(server);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public Server UpdateServer(Server server)
+        {
+            var url = $"/cloud/project/{SettingsHelper.OvhProject}/instance/{server.CloudId}";
+
+            try
+            {
+                var updatedServer = _client.PutAsync<OvhServer>(url, new {instanceName = server.Name}).GetAwaiter()
+                    .GetResult();
+                return OvhMapper.MapOvhServerToServer(updatedServer);
             }
             catch (Exception e)
             {

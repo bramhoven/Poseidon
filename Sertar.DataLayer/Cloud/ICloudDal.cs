@@ -19,6 +19,13 @@ namespace Sertar.DataLayer.Cloud
         Server CreateServer(string name, string size, string image, string region);
 
         /// <summary>
+        /// Updates the server.
+        /// </summary>
+        /// <param name="server">The new server data</param>
+        /// <returns></returns>
+        Server UpdateServer(Server server);
+
+        /// <summary>
         ///     Get all available images for provider.
         /// </summary>
         /// <returns></returns>

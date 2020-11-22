@@ -94,6 +94,16 @@ namespace Sertar.BusinessLayer.Cloud
             return _cloudDal.GetServer(serverId);
         }
 
+        /// <summary>
+        /// Updates a server.
+        /// </summary>
+        /// <param name="server">The server to update</param>
+        /// <returns></returns>
+        public Server UpdateServer(Server server)
+        {
+            return _cloudDal.UpdateServer(server);
+        }
+
         #endregion
     }
 }

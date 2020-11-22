@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sertar.Models.Servers;
 
 namespace Sertar.DataLayer.Servers
@@ -13,6 +14,13 @@ namespace Sertar.DataLayer.Servers
         /// <param name="server">The server to delete</param>
         /// <returns></returns>
         bool DeleteServer(Server server);
+
+        /// <summary>
+        /// Gets a server.
+        /// </summary>
+        /// <param name="id">The id of the server</param>
+        /// <returns></returns>
+        Server GetServer(Guid id);
 
         /// <summary>
         ///     Get servers.
