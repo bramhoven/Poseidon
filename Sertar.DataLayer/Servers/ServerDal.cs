@@ -53,6 +53,19 @@ namespace Sertar.DataLayer.Servers
             }
         }
 
+        public Server GetServer(Guid id)
+        {
+            try
+            {
+                return _serverContext.Servers.FirstOrDefault(server => server.Id == id);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
         public ICollection<Server> GetServers()
         {
             return _serverContext.Servers.ToList();
