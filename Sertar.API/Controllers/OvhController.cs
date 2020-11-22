@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
+using Sertar.Api.Models.RequestData;
 using Sertar.API.Models.RequestData;
 using Sertar.BusinessLayer.Cloud;
 using Sertar.BusinessLayer.Servers;
 using Sertar.DataLayer.Cloud;
-using Sertar.DataLayer.Contexts.ServerContext;
 using Sertar.DataLayer.Servers;
 using Sertar.Models.Cloud;
+using Sertar.Models.Servers;
 
 namespace Sertar.Api.Controllers
 {
@@ -17,6 +20,8 @@ namespace Sertar.Api.Controllers
         #region Fields
 
         private readonly CloudManager _cloudManager;
+
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly ServerManager _serverManager;
 
         #endregion
@@ -34,7 +39,7 @@ namespace Sertar.Api.Controllers
         #region Methods
 
         /// <summary>
-        ///     Create an server in the ovh cloud.
+        ///     Create a server in the ovh cloud.
         /// </summary>
         /// <param name="serverCreateData">The server data</param>
         /// <returns></returns>
@@ -42,16 +47,46 @@ namespace Sertar.Api.Controllers
         [HttpPost]
         public ActionResult<object> CreateServer(ServerCreateData serverCreateData)
         {
-            var server = _cloudManager.CreateServer(serverCreateData.Name, serverCreateData.Size,
-                serverCreateData.Image,
-                serverCreateData.Region);
-            if (server != null)
+            try
             {
-                _serverManager.InsertServer(server);
-                return Ok(server);
+                var server = _cloudManager.CreateServer(serverCreateData.Name, serverCreateData.Size,
+                    serverCreateData.Image,
+                    serverCreateData.Region);
+                if (server != null)
+                {
+                    _serverManager.InsertServer(server);
+                    return Ok(server);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
             }
 
             return BadRequest(new {Message = "Failed to create server"});
+        }
+
+        /// <summary>
+        ///     Getting ovh's available images.
+        /// </summary>
+        /// <returns></returns>
+        [Route("images")]
+        [HttpGet]
+        public ActionResult<ICollection<InstanceSizeBase>> GetAvailableImages()
+        {
+            return Ok(_cloudManager.GetAvailableImages());
+        }
+
+        /// <summary>
+        ///     Getting ovh's available images by region.
+        /// </summary>
+        /// <param name="region">The region to filter by</param>
+        /// <returns></returns>
+        [Route("images/regions/{region}")]
+        [HttpGet]
+        public ActionResult<ICollection<InstanceSizeBase>> GetAvailableImages(string region)
+        {
+            return Ok(_cloudManager.GetAvailableImages(region));
         }
 
         /// <summary>
@@ -78,26 +113,60 @@ namespace Sertar.Api.Controllers
         }
 
         /// <summary>
-        ///     Getting ovh's available images.
+        ///     Gets a server in the ovh cloud.
         /// </summary>
+        /// <param name="serverId">The server id</param>
         /// <returns></returns>
-        [Route("images")]
+        [Route("servers/{serverId}")]
         [HttpGet]
-        public ActionResult<ICollection<InstanceSizeBase>> GetAvailableImages()
+        public ActionResult<object> GetServer(string serverId)
         {
-            return Ok(_cloudManager.GetAvailableImages());
+            try
+            {
+                var server = _cloudManager.GetServer(serverId);
+                if (server != null)
+                    return Ok(server);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+            }
+
+            return BadRequest(new {Message = "Failed to get server"});
         }
 
         /// <summary>
-        ///     Getting ovh's available images by region.
+        ///     Updates a server in the ovh cloud.
         /// </summary>
-        /// <param name="region">The region to filter by</param>
+        /// <param name="serverUpdateData">The server data to update</param>
         /// <returns></returns>
-        [Route("images/regions/{region}")]
-        [HttpGet]
-        public ActionResult<ICollection<InstanceSizeBase>> GetAvailableImages(string region)
+        [Route("servers")]
+        [HttpPut]
+        public ActionResult<object> UpdateServer(ServerUpdateData serverUpdateData)
         {
-            return Ok(_cloudManager.GetAvailableImages(region));
+            if (serverUpdateData == null)
+                return BadRequest(new {Message = "No data provided"});
+
+            if (string.IsNullOrWhiteSpace(serverUpdateData.CloudId) &&
+                (serverUpdateData.Id == null || string.IsNullOrWhiteSpace(serverUpdateData.Id)))
+                return BadRequest(new {Message = "No id has been provided"});
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(serverUpdateData.CloudId))
+                    serverUpdateData.CloudId = _serverManager.GetServer(Guid.Parse(serverUpdateData.Id)).CloudId;
+
+                var updatedServer = _cloudManager.UpdateServer(new Server
+                    {CloudId = serverUpdateData.CloudId, Name = serverUpdateData.Name});
+                if (updatedServer != null)
+                    return Ok(updatedServer);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+            }
+
+            return BadRequest(new {Message = "Failed to update server"});
         }
 
         #endregion

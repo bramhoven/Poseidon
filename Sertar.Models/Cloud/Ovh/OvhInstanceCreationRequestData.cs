@@ -8,6 +8,7 @@
         public string ImageId { get; set; }
         public string Name { get; set; }
         public string Region { get; set; }
+        public bool MonthlyBilling { get; set; }
 
         #endregion
     }

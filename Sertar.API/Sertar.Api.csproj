@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Sertar.DataLayer\Sertar.DataLayer.csproj" />
     <ProjectReference Include="..\Sertar.Migrations.Mysql\Sertar.Migrations.Mysql.csproj" />
     <ProjectReference Include="..\Sertar.Migrations.Postgresql\Sertar.Migrations.Postgres.csproj" />
+    <ProjectReference Include="..\Sertar.Models\Sertar.Models.csproj" />
   </ItemGroup>
 
 
