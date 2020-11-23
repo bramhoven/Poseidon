@@ -1,4 +1,7 @@
-﻿namespace Sertar.Models.Ssh
+﻿using System;
+using Sertar.Enums.Ssh;
+
+namespace Sertar.Models.Ssh
 {
     public class SshKey
     {
@@ -8,6 +11,11 @@
         ///     The key format.
         /// </summary>
         public SshKeyFormat Format { get; set; }
+
+        /// <summary>
+        ///     The id of this key.
+        /// </summary>
+        public Guid? Id { get; set; }
 
         /// <summary>
         ///     The name of this key.

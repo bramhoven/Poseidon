@@ -1,4 +1,4 @@
-﻿namespace Sertar.Models.Ssh
+﻿namespace Sertar.Enums.Ssh
 {
     public enum SshKeyFormat
     {
