@@ -1,5 +1,5 @@
 ﻿using System;
-using Sertar.BusinessLayer.Ssh.Models;
+using Sertar.Models.Ssh;
 
 namespace Sertar.BusinessLayer.Ssh.Providers
 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sertar.Models.Servers;
+using Sertar.Models.Ssh;
 
 namespace Sertar.DataLayer.Contexts.ServerContext
 {
@@ -8,6 +9,7 @@ namespace Sertar.DataLayer.Contexts.ServerContext
         #region Properties
 
         public DbSet<Server> Servers { get; set; }
+        public DbSet<SshKey> SshKeys { get; set; }
 
         #endregion
 
