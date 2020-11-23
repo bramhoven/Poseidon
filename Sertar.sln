@@ -35,7 +35,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sertar.Migrations.Postgres"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exceptions", "Exceptions", "{7C178D8B-0C35-4792-9CFD-CD38BF494F5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sertar.Exceptions", "Sertar.Exceptions\Sertar.Exceptions.csproj", "{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sertar.Exceptions", "Sertar.Exceptions\Sertar.Exceptions.csproj", "{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enums", "Enums", "{5E63C597-A39A-4B9B-BD45-912F2730EBD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sertar.Enums", "Sertar.Enums\Sertar.Enums.csproj", "{7DA89432-F95A-4126-9446-93C1C23631E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +87,10 @@ Global
 		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DA89432-F95A-4126-9446-93C1C23631E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DA89432-F95A-4126-9446-93C1C23631E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DA89432-F95A-4126-9446-93C1C23631E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DA89432-F95A-4126-9446-93C1C23631E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +106,7 @@ Global
 		{3AAB6932-C317-4A1E-91FE-F6B9034C3E02} = {685357C9-A171-4117-B7C1-E83835A7A84F}
 		{0BEFE3C6-FC8D-4C1A-B511-9F037B7B0E50} = {685357C9-A171-4117-B7C1-E83835A7A84F}
 		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E} = {7C178D8B-0C35-4792-9CFD-CD38BF494F5E}
+		{7DA89432-F95A-4126-9446-93C1C23631E8} = {5E63C597-A39A-4B9B-BD45-912F2730EBD0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1743B766-4617-4575-B730-2FD6502DECA3}
