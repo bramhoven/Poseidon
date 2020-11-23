@@ -1,28 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Sertar.DataLayer.Contexts.ServerContext;
 using Sertar.Models.Ssh;
 
 namespace Sertar.DataLayer.Ssh
 {
     public class KeyDal : IKeyDal
     {
-        public bool DeleteKey(Guid id)
+        #region Fields
+
+        /// <summary>
+        ///     The server database context.
+        /// </summary>
+        private readonly DbServerContext _serverContext;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="KeyDal" />
+        /// </summary>
+        /// <param name="serverContext"></param>
+        public KeyDal(DbServerContext serverContext)
         {
-            throw new NotImplementedException();
+            _serverContext = serverContext;
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void DeleteKey(Guid id)
+        {
+            var sshKey = GetKey(id);
+            DeleteKey(sshKey);
+        }
+
+        public void DeleteKey(SshKey sshKey)
+        {
+            _serverContext.SshKeys.Remove(sshKey);
+            _serverContext.SaveChanges();
         }
 
         public SshKey GetKey(Guid id)
         {
-            throw new NotImplementedException();
+            return _serverContext.SshKeys.FirstOrDefault(key => key.Id == id);
         }
 
-        public bool InsertKey(SshKey key)
+        public ICollection<SshKey> GetKeys()
         {
-            throw new NotImplementedException();
+            return _serverContext.SshKeys.ToList();
         }
 
-        public SshKey UpdateKey(SshKey key)
+        public void InsertKey(SshKey key)
         {
-            throw new NotImplementedException();
+            _serverContext.SshKeys.Add(key);
+            _serverContext.SaveChanges();
         }
+
+        public void UpdateKey(SshKey key)
+        {
+            _serverContext.SshKeys.Attach(key);
+            _serverContext.SaveChanges();
+        }
+
+        #endregion
     }
 }
