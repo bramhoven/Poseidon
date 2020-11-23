@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sertar.Migrations.Mysql", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sertar.Migrations.Postgres", "Sertar.Migrations.Postgresql\Sertar.Migrations.Postgres.csproj", "{0BEFE3C6-FC8D-4C1A-B511-9F037B7B0E50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sertar.BusinessLayer.Ssh", "Sertar.BusinessLayer.Ssh\Sertar.BusinessLayer.Ssh.csproj", "{CF1DC37B-A12B-49FF-9D6A-575F249B6EF8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exceptions", "Exceptions", "{7C178D8B-0C35-4792-9CFD-CD38BF494F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sertar.Exceptions", "Sertar.Exceptions\Sertar.Exceptions.csproj", "{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,10 +79,10 @@ Global
 		{0BEFE3C6-FC8D-4C1A-B511-9F037B7B0E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BEFE3C6-FC8D-4C1A-B511-9F037B7B0E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BEFE3C6-FC8D-4C1A-B511-9F037B7B0E50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF1DC37B-A12B-49FF-9D6A-575F249B6EF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF1DC37B-A12B-49FF-9D6A-575F249B6EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF1DC37B-A12B-49FF-9D6A-575F249B6EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF1DC37B-A12B-49FF-9D6A-575F249B6EF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,7 +97,7 @@ Global
 		{09D81E4F-FCFC-4CFF-9C3C-98A9A3D61C0E} = {F4456149-54F7-48F2-A632-6279B42A62DC}
 		{3AAB6932-C317-4A1E-91FE-F6B9034C3E02} = {685357C9-A171-4117-B7C1-E83835A7A84F}
 		{0BEFE3C6-FC8D-4C1A-B511-9F037B7B0E50} = {685357C9-A171-4117-B7C1-E83835A7A84F}
-		{CF1DC37B-A12B-49FF-9D6A-575F249B6EF8} = {912C0BF5-7329-4E78-A280-96EF319A3FD0}
+		{3A7B78FA-3BF8-4A57-95D5-2BB8825D878E} = {7C178D8B-0C35-4792-9CFD-CD38BF494F5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1743B766-4617-4575-B730-2FD6502DECA3}

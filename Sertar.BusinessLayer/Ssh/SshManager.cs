@@ -2,9 +2,10 @@
 using System.IO;
 using System.Text;
 using Renci.SshNet;
-using Sertar.BusinessLayer.Ssh.Models;
 using Sertar.BusinessLayer.Ssh.Providers;
+using Sertar.Exceptions;
 using Sertar.Models.Servers;
+using Sertar.Models.Ssh;
 
 namespace Sertar.BusinessLayer.Ssh
 {
@@ -46,7 +47,7 @@ namespace Sertar.BusinessLayer.Ssh
         }
 
         /// <summary>
-        /// Connect the manager to a server.
+        ///     Connect the manager to a server.
         /// </summary>
         /// <param name="server">The server to connect to.</param>
         /// <param name="sshKey">The ssh key to authenticate with</param>
@@ -60,10 +61,18 @@ namespace Sertar.BusinessLayer.Ssh
         }
 
 
-        public void ExecuteCommand(string command)
+        /// <summary>
+        ///     Executes a command on the ssh server.
+        /// </summary>
+        /// <param name="command">The command to execute</param>
+        /// <returns></returns>
+        public string ExecuteCommand(string command)
         {
             if (!_client.IsConnected)
                 throw new NotConnectedException();
+
+            var result = _client.RunCommand(command);
+            return result.Result;
         }
 
         #endregion
