@@ -7,7 +7,7 @@
         ECDSA = 2,
         ECDSA256 = 3,
         ECDSA384 = 4,
-        ECDSA521 = 4,
-        ED25519 = 5
+        ECDSA521 = 5,
+        ED25519 = 6
     }
 }
