@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sertar.DataLayer.Contexts.ServerContext;
 
 namespace Sertar.Migrations.Mysql.Migrations.MysqlServer
 {
     [DbContext(typeof(MysqlServerContext))]
-    partial class MysqlServerContextModelSnapshot : ModelSnapshot
+    [Migration("20201123214321_AddIpVersionAndServerRootUser")]
+    partial class AddIpVersionAndServerRootUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,29 +68,6 @@ namespace Sertar.Migrations.Mysql.Migrations.MysqlServer
                     b.HasKey("Id");
 
                     b.ToTable("Servers");
-                });
-
-            modelBuilder.Entity("Sertar.Models.Ssh.SshKey", b =>
-                {
-                    b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Format")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("PrivateKey")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("PublicKey")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SshKeys");
                 });
 
             modelBuilder.Entity("Sertar.Models.Servers.IpAddress", b =>
