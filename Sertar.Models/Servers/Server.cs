@@ -45,6 +45,11 @@ namespace Sertar.Models.Servers
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        ///     The root user of the server.
+        /// </summary>
+        public string RootUser { get; set; }
+
         #endregion
     }
 }
