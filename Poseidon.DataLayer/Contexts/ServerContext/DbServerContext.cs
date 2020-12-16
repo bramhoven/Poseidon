@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Poseidon.Models.Servers;
-using Poseidon.Models.Ssh;
 
 namespace Poseidon.DataLayer.Contexts.ServerContext
 {
@@ -9,7 +8,6 @@ namespace Poseidon.DataLayer.Contexts.ServerContext
         #region Properties
 
         public DbSet<Server> Servers { get; set; }
-        public DbSet<SshKey> SshKeys { get; set; }
 
         #endregion
 
