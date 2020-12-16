@@ -9,8 +9,4 @@
     <PackageReference Include="YamlDotNet" Version="8.1.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Poseidon.Enums\Poseidon.Enums.csproj" />
-  </ItemGroup>
-
 </Project>

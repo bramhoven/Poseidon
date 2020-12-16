@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Poseidon.DataLayer\Poseidon.DataLayer.csproj" />
-    <ProjectReference Include="..\Poseidon.Exceptions\Poseidon.Exceptions.csproj" />
     <ProjectReference Include="..\Poseidon.Helpers\Poseidon.Helpers.csproj" />
     <ProjectReference Include="..\Poseidon.Models\Poseidon.Models.csproj" />
   </ItemGroup>
