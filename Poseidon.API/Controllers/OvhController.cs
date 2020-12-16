@@ -21,10 +21,11 @@ namespace Poseidon.Api.Controllers
 
         private readonly CloudManager _cloudManager;
 
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly ServerManager _serverManager;
 
         #endregion
+
+        public ILogger Logger { get; } = LogManager.GetCurrentClassLogger();
 
         #region Constructors
 
@@ -60,7 +61,7 @@ namespace Poseidon.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e);
+                Logger.Error(e);
             }
 
             return BadRequest(new {Message = "Failed to create server"});
@@ -129,7 +130,7 @@ namespace Poseidon.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e);
+                Logger.Error(e);
             }
 
             return BadRequest(new {Message = "Failed to get server"});
@@ -163,7 +164,7 @@ namespace Poseidon.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.Error(e);
+                Logger.Error(e);
             }
 
             return BadRequest(new {Message = "Failed to update server"});
