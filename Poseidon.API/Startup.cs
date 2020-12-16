@@ -38,7 +38,7 @@ namespace Poseidon.API
         #region Methods
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbUserContext userContext, DbServerContext serverContext)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +52,12 @@ namespace Poseidon.API
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            // Setup databases
+            userContext.Database.EnsureCreated();
+            userContext.Database.Migrate();
+            serverContext.Database.EnsureCreated();
+            serverContext.Database.Migrate();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -73,14 +79,14 @@ namespace Poseidon.API
                 {
                     services.AddDbContext<DbUserContext, PostgresUserContext>(options =>
                         options.UseNpgsql(Configuration.GetConnectionString("UserDatabase"),
-                            b => b.MigrationsAssembly("Sertar.Migrations.Postgres")));
+                            b => b.MigrationsAssembly("Poseidon.Migrations.Postgres")));
                     break;
                 }
                 case "mysql":
                 {
                     services.AddDbContext<DbUserContext, MysqlUserContext>(options =>
                         options.UseMySql(Configuration.GetConnectionString("UserDatabase"),
-                            b => b.MigrationsAssembly("Sertar.Migrations.Mysql")));
+                            b => b.MigrationsAssembly("Poseidon.Migrations.Mysql")));
                     break;
                 }
             }
@@ -90,13 +96,13 @@ namespace Poseidon.API
                 case "postgres":
                 {
                     services.AddDbContext<DbServerContext, PostgresServerContext>(options =>
-                        options.UseNpgsql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Postgres")));
+                        options.UseNpgsql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Poseidon.Migrations.Postgres")));
                     break;
                 }
                 case "mysql":
                 {
                     services.AddDbContext<DbServerContext, MysqlServerContext>(options =>
-                        options.UseMySql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Sertar.Migrations.Mysql")));
+                        options.UseMySql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Poseidon.Migrations.Mysql")));
                     break;
                 }
             }
