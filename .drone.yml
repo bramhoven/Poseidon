@@ -3,11 +3,15 @@ kind: pipeline
 steps:
 - name: build
   image: mcr.microsoft.com/dotnet/sdk:3.1
+  environment:
+    POSEIDON_SECRETS:
+      from_secret: POSEIDON_SECRETS
   commands:
     - cd $(pwd)/Poseidon.API/
     - dotnet restore
     - dotnet build
     - dotnet publish -c Release -o ./bin/
+    - echo $POSEIDON_SECRETS > secrets.json
 - name: publish
   image: plugins/docker
   when:
@@ -20,8 +24,3 @@ steps:
     repo: bramhoven/poseidon
     context: Poseidon.API
     dockerfile: Poseidon.API/Dockerfile
-  environment:
-    POSEIDON_SECRETS:
-      from_secret: POSEIDON_SECRETS
-  commands:
-    - echo $POSEIDON_SECRETS > secrets.json
