@@ -2,7 +2,7 @@ kind: pipeline
 
 steps:
 - name: build
-  image: microsoft/dotnet:sdk
+  image: mcr.microsoft.com/dotnet/sdk:3.1
   commands:
     - cd $(pwd)/Poseidon.API/
     - dotnet restore
@@ -17,5 +17,5 @@ steps:
         from_secret: DOCKER_USERNAME
     password:
         from_secret: DOCKER_PASSWORD
-    repo: mcr.microsoft.com/dotnet/runtime
+    repo: bramhoven/poseidon
     dockerfile: Dockerfile
