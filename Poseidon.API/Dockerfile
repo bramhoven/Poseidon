@@ -6,13 +6,11 @@ COPY . .
 
 RUN cat ./secrets.json | dotnet user-secrets set
 
-ENTRYPOINT ["dotnet", "Poseidon.Api.dll"]
-
 FROM mcr.microsoft.com/dotnet/aspnet:3.1
 
 WORKDIR /app
 
-COPY --from=build bin/Release/netcoreapp3.1/Poseidon.Api.dll ./
+COPY --from=build /app/bin/Release/netcoreapp3.1/Poseidon.Api.dll ./
 
 EXPOSE 80
 
