@@ -18,4 +18,4 @@ steps:
     password:
         from_secret: DOCKER_PASSWORD
     repo: bramhoven/poseidon
-    dockerfile: Dockerfile
+    dockerfile: Poseidon.API/Dockerfile
