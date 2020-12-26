@@ -20,3 +20,8 @@ steps:
     repo: bramhoven/poseidon
     context: Poseidon.API
     dockerfile: Poseidon.API/Dockerfile
+  environment:
+    POSEIDON_SECRETS:
+      from_secret: POSEIDON_SECRETS
+  commands:
+    - echo $POSEIDON_SECRETS > secrets.json
