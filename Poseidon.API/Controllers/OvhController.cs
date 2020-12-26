@@ -13,7 +13,7 @@ using Poseidon.DataLayer.Servers;
 
 namespace Poseidon.Api.Controllers
 {
-    [Route("api/ovh")]
+    [Route("ovh")]
     [ApiController]
     public class OvhController : ControllerBase
     {

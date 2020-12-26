@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using Poseidon.DataLayer.Contexts.UserContext;
@@ -55,6 +56,11 @@ namespace Poseidon.DataLayer.Users
         public User GetUserByUsername(string username)
         {
             return _userContext.Users.First(user => user.Username.Equals(username));
+        }
+
+        public ICollection<User> GetUsers()
+        {
+            return _userContext.Users.ToList();
         }
 
         public bool InsertUser(User user)

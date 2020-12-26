@@ -1,4 +1,5 @@
-﻿using Poseidon.Models.Users;
+﻿using System.Collections.Generic;
+using Poseidon.Models.Users;
 
 namespace Poseidon.DataLayer.Users
 {
@@ -13,13 +14,18 @@ namespace Poseidon.DataLayer.Users
         /// <returns></returns>
         bool DeleteUser(User user);
 
-
         /// <summary>
         ///     Get user by username.
         /// </summary>
         /// <param name="username">The username</param>
         /// <returns></returns>
         User GetUserByUsername(string username);
+
+        /// <summary>
+        ///     Get all the users.
+        /// </summary>
+        /// <returns></returns>
+        ICollection<User> GetUsers();
 
         /// <summary>
         ///     Insert user.

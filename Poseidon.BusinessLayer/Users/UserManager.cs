@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 using NLog;
 using Poseidon.BusinessLayer.Authentication;
@@ -30,6 +31,21 @@ namespace Poseidon.BusinessLayer.Users
 
         #region Constructors
 
+        /// <summary>
+        ///     Initializes a new instance of <see cref="UserManager" />.
+        ///     Without authentication.
+        /// </summary>
+        /// <param name="userDal"></param>
+        public UserManager(IUserDal userDal)
+        {
+            _userDal = userDal;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="UserManager" />.
+        ///     With authentication.
+        /// </summary>
+        /// <param name="userDal"></param>
         public UserManager(IUserDal userDal, AuthenticationManager authenticationManager)
         {
             _userDal = userDal;
@@ -48,6 +64,15 @@ namespace Poseidon.BusinessLayer.Users
         public User GetUser(string username)
         {
             return _userDal.GetUserByUsername(username);
+        }
+
+        /// <summary>
+        ///     Get all users.
+        /// </summary>
+        /// <returns>TList of all the users.</returns>
+        public ICollection<User> GetUsers()
+        {
+            return _userDal.GetUsers();
         }
 
         /// <summary>

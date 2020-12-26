@@ -1,7 +1,8 @@
-﻿using NLog;
+﻿using System;
+using System.Collections.Generic;
+using NLog;
 using Poseidon.DataLayer.Servers;
 using Poseidon.Models.Servers;
-using System;
 
 namespace Poseidon.BusinessLayer.Servers
 {
@@ -37,7 +38,17 @@ namespace Poseidon.BusinessLayer.Servers
         #region Methods
 
         /// <summary>
-        /// Get server by GUID.
+        ///     Deletes the server.
+        /// </summary>
+        /// <param name="server">The server</param>
+        /// <returns></returns>
+        public bool DeleteServer(Server server)
+        {
+            return _serverDal.DeleteServer(server);
+        }
+
+        /// <summary>
+        ///     Get server by GUID.
         /// </summary>
         /// <param name="id">The id of the server</param>
         /// <returns></returns>
@@ -47,7 +58,7 @@ namespace Poseidon.BusinessLayer.Servers
         }
 
         /// <summary>
-        /// Get server by id as string.
+        ///     Get server by id as string.
         /// </summary>
         /// <param name="id">The id of the server as string</param>
         /// <returns></returns>
@@ -57,13 +68,12 @@ namespace Poseidon.BusinessLayer.Servers
         }
 
         /// <summary>
-        ///     Deletes the server.
+        ///     Get all servers.
         /// </summary>
-        /// <param name="server">The server</param>
         /// <returns></returns>
-        public bool DeleteServer(Server server)
+        public ICollection<Server> GetServers()
         {
-            return _serverDal.DeleteServer(server);
+            return _serverDal.GetServers();
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using Poseidon.Helpers.Settings;
 using Poseidon.DataLayer.Contexts.ServerContext;
 using Poseidon.DataLayer.Contexts.UserContext;
 using Poseidon.DataLayer.Servers;
+using Poseidon.DataLayer.Users;
 
 namespace Poseidon.API
 {
@@ -66,6 +67,7 @@ namespace Poseidon.API
             ConfigureDatabases(services);
 
             services.AddScoped<IServerDal, ServerDal>();
+            services.AddScoped<IUserDal, UserDal>();
 
             services.AddControllers();
         }
