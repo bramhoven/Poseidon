@@ -1,0 +1,21 @@
+kind: pipeline
+
+steps:
+- name: build
+  image: microsoft/dotnet:sdk
+  commands:
+    - cd $(pwd)/Poseidon.API/
+    - dotnet restore
+    - dotnet build
+    - dotnet publish -c Release -o ./bin/
+- name: publish
+  image: plugins/docker
+  when:
+    branch: main
+  settings:
+    username:
+        from_secret: DOCKER_USERNAME
+    password:
+        from_secret: DOCKER_PASSWORD
+    repo: mcr.microsoft.com/dotnet/runtime
+    dockerfile: Dockerfile
