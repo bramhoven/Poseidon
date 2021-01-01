@@ -64,7 +64,6 @@ namespace Poseidon.Api.Controllers
             catch (Exception e)
             {
                 Logger.Error(e);
-                return BadRequest(new { Message = e.Message });
             }
 
             return BadRequest(new {Message = "Failed to create server"});
