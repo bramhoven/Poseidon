@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Poseidon.Models.Cloud
 {
@@ -32,21 +33,31 @@ namespace Poseidon.Models.Cloud
         public int Ram { get; internal set; }
 
         /// <summary>
-        ///     The region where this size can be used.
+        ///     The regions where this size can be used.
         /// </summary>
-        public string Region { get; internal set; }
+        public ICollection<string> Regions { get; internal set; }
+
+        /// <summary>
+        ///     The shortname for this size.
+        /// </summary>
+        public string Slug { get; internal set; }
 
         /// <summary>
         ///     The amount of storage.
         /// </summary>
         public int Storage { get; internal set; }
 
+        /// <summary>
+        ///     The amount of network transfer.
+        /// </summary>
+        public double Transfer { get; internal set; }
+
         #endregion
 
         #region Constructors
 
         /// <summary>
-        ///     Initialize a new instance of <see cref="InstanceSizeBase"/>
+        ///     Initialize a new instance of <see cref="InstanceSizeBase" />
         /// </summary>
         protected InstanceSizeBase()
         {

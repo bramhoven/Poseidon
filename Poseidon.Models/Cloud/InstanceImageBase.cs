@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Poseidon.Models.Cloud
 {
@@ -7,24 +8,39 @@ namespace Poseidon.Models.Cloud
         #region Properties
 
         /// <summary>
+        ///     The description of this image.
+        /// </summary>
+        public string Description { get; internal set; }
+
+        /// <summary>
         ///     The id of this image.
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; internal set; }
 
         /// <summary>
         ///     The name of this image.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; internal set; }
 
         /// <summary>
-        ///     The region in which this image can be used.
+        ///     The os of this image.
         /// </summary>
-        public string Region { get; set; }
+        public string Os { get; internal set; }
 
         /// <summary>
-        ///     The os type of this image.
+        ///     The regions in which this image can be used.
         /// </summary>
-        public string Type { get; set; }
+        public ICollection<string> Regions { get; internal set; }
+
+        /// <summary>
+        ///     The shortname for this image.
+        /// </summary>
+        public string Slug { get; internal set; }
+
+        /// <summary>
+        ///     The tags for this image.
+        /// </summary>
+        public ICollection<string> Tags { get; internal set; }
 
         #endregion
 

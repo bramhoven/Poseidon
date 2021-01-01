@@ -1,4 +1,5 @@
-﻿using Poseidon.Models.Cloud.Ovh;
+﻿using System.Collections.Generic;
+using Poseidon.Models.Cloud.Ovh;
 
 namespace Poseidon.Models.Cloud
 {
@@ -24,9 +25,10 @@ namespace Poseidon.Models.Cloud
             Image = image;
 
             Id = image.Id;
+            Slug = image.Id;
             Name = image.Name;
-            Region = image.Region;
-            Type = image.Type;
+            Regions = new List<string> { image.Region};
+            Os = image.Type;
         }
 
         #endregion

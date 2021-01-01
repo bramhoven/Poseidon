@@ -4,13 +4,13 @@ using Poseidon.DataLayer.Servers;
 
 namespace Poseidon.Api.Controllers
 {
-    [Route("ovh")]
+    [Route("digitalocean")]
     [ApiController]
-    public class OvhController : CloudControllerBase
+    public class DigitalOceanController : CloudControllerBase
     {
         #region Constructors
 
-        public OvhController(IServerDal serverDal) : base(serverDal, CloudManagerHelper.GetOvhDal())
+        public DigitalOceanController(IServerDal serverDal) : base(serverDal, CloudManagerHelper.GetDigitalOceanDal())
         {
         }
 

@@ -13,7 +13,23 @@ namespace Poseidon.Helpers.Settings
         #region Properties
 
         /// <summary>
-        ///     The ovvh application key.
+        ///     The digital ocean api key.
+        /// </summary>
+        public static string DigitalOceanApiKey =>
+            _configuration.GetValue<string>("CloudCredentials:DigitalOcean:ApiKey");
+
+        /// <summary>
+        ///     Gets whether digital ocean should be mocked.
+        /// </summary>
+        public static bool MockDigitalOcean => _configuration.GetValue<bool>("Mocked:DigitalOcean");
+
+        /// <summary>
+        ///     Gets whether ovh should be mocked.
+        /// </summary>
+        public static bool MockOvh => _configuration.GetValue<bool>("Mocked:Ovh");
+
+        /// <summary>
+        ///     The ovh application key.
         /// </summary>
         public static string OvhApplicationKey =>
             _configuration.GetValue<string>("CloudCredentials:Ovh:ApplicationKey");

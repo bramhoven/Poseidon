@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Poseidon.Models.Cloud.Ovh;
 
 namespace Poseidon.Models.Cloud
@@ -26,7 +27,7 @@ namespace Poseidon.Models.Cloud
 
             Id = flavor.Id;
             Name = flavor.Name;
-            Region = flavor.Region;
+            Regions = new List<string> { flavor.Region };
             Cpu = flavor.Vcpus;
             Ram = (int) Math.Floor(flavor.Ram * 1.024);
             Storage = flavor.Disk;

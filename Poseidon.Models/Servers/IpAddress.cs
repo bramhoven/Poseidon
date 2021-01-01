@@ -7,6 +7,11 @@ namespace Poseidon.Models.Servers
         #region Properties
 
         /// <summary>
+        ///     The gateway of the ip address.
+        /// </summary>
+        public string Gateway { get; set; }
+
+        /// <summary>
         ///     The id of the ip address.
         /// </summary>
         public Guid? Id { get; set; }
@@ -20,6 +25,11 @@ namespace Poseidon.Models.Servers
         ///     The optional name of the ip address.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        ///     The netmask of the ip address.
+        /// </summary>
+        public string Netmask { get; set; }
 
         /// <summary>
         ///     The ip version.

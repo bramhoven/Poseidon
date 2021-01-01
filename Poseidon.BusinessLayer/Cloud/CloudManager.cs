@@ -61,7 +61,7 @@ namespace Poseidon.BusinessLayer.Cloud
         /// <returns></returns>
         public ICollection<InstanceImageBase> GetAvailableImages(string region)
         {
-            return _cloudDal.GetAvailableImages().Where(image => image.Region.ToLower().Equals(region.ToLower()))
+            return _cloudDal.GetAvailableImages().Where(image => image.Regions.Contains(region))
                 .ToList();
         }
 
@@ -81,7 +81,7 @@ namespace Poseidon.BusinessLayer.Cloud
         /// <returns>The sizes</returns>
         public ICollection<InstanceSizeBase> GetAvailableSizes(string region)
         {
-            return _cloudDal.GetAvailableSizes().Where(size => size.Region.ToLower().Equals(region.ToLower())).ToList();
+            return _cloudDal.GetAvailableSizes().Where(size => size.Regions.Contains(region)).ToList();
         }
 
         /// <summary>
