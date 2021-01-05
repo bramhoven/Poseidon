@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using Ovh.Api;
-using Poseidon.DataLayer.Mappers;
 using Poseidon.DataLayer.Cloud.Models.Ovh;
+using Poseidon.DataLayer.Mappers;
 using Poseidon.Helpers.Settings;
 using Poseidon.Models.Cloud;
 using Poseidon.Models.Cloud.Ovh;
@@ -72,7 +72,7 @@ namespace Poseidon.DataLayer.Cloud
 
             try
             {
-                var ovhServer = _client.PostAsync<OvhServer>(url, requestData).GetAwaiter().GetResult();
+                var ovhServer = _client.PostAsync<OvhServer>(url, requestData).Result;
                 var server = new Server
                 {
                     CloudId = ovhServer.Id,
@@ -95,7 +95,7 @@ namespace Poseidon.DataLayer.Cloud
 
             try
             {
-                var result = _client.GetAsync<ICollection<OvhImage>>(url).GetAwaiter().GetResult();
+                var result = _client.GetAsync<ICollection<OvhImage>>(url).Result;
                 return result.Select(image => new OvhInstanceImage(image)).Cast<InstanceImageBase>().ToList();
             }
             catch (Exception e)
@@ -111,7 +111,7 @@ namespace Poseidon.DataLayer.Cloud
 
             try
             {
-                var result = _client.GetAsync<ICollection<OvhFlavor>>(url).GetAwaiter().GetResult();
+                var result = _client.GetAsync<ICollection<OvhFlavor>>(url).Result;
                 return result.Select(flavor => new OvhInstanceSize(flavor)).Cast<InstanceSizeBase>().ToList();
             }
             catch (Exception e)
@@ -121,13 +121,29 @@ namespace Poseidon.DataLayer.Cloud
             }
         }
 
+        public ICollection<Region> getRegions()
+        {
+            var url = $"/cloud/project/{SettingsHelper.OvhProject}/region";
+
+            try
+            {
+                var result = _client.GetAsync<ICollection<string>>(url).Result;
+                return result.Select(region => new Region(region)).ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return new List<Region>();
+            }
+        }
+
         public Server GetServer(string serverId)
         {
             var url = $"/cloud/project/{SettingsHelper.OvhProject}/instance/{serverId}";
 
             try
             {
-                var server = _client.GetAsync<OvhServer>(url).GetAwaiter().GetResult();
+                var server = _client.GetAsync<OvhServer>(url).Result;
                 return OvhMapper.MapOvhServerToServer(server);
             }
             catch (Exception e)
@@ -143,8 +159,7 @@ namespace Poseidon.DataLayer.Cloud
 
             try
             {
-                var updatedServer = _client.PutAsync<OvhServer>(url, new {instanceName = server.Name}).GetAwaiter()
-                    .GetResult();
+                var updatedServer = _client.PutAsync<OvhServer>(url, new {instanceName = server.Name}).Result;
                 return OvhMapper.MapOvhServerToServer(updatedServer);
             }
             catch (Exception e)

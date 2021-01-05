@@ -38,7 +38,7 @@ namespace Poseidon.Models.Cloud
         public ICollection<string> Regions { get; internal set; }
 
         /// <summary>
-        ///     The shortname for this size.
+        ///     The short name for this size.
         /// </summary>
         public string Slug { get; internal set; }
 

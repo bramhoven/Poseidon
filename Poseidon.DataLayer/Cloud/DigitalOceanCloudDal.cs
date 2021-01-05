@@ -91,6 +91,20 @@ namespace Poseidon.DataLayer.Cloud
             }
         }
 
+        public ICollection<Region> getRegions()
+        {
+            try
+            {
+                var regions = _client.Regions.GetAll().Result;
+                return regions.Select(DigitalOceanMapper.MapDigitalOceanRegionToRegion).ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return new List<Region>();
+            }
+        }
+
         public Server GetServer(string serverId)
         {
             try

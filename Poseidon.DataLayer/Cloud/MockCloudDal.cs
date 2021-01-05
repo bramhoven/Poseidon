@@ -36,7 +36,6 @@ namespace Poseidon.DataLayer.Cloud
         {
             return new List<InstanceImageBase>()
             {
-
             };
         }
 
@@ -44,7 +43,18 @@ namespace Poseidon.DataLayer.Cloud
         {
             return new List<InstanceSizeBase>()
             {
+            };
+        }
 
+        public ICollection<Region> getRegions()
+        {
+            return new List<Region>()
+            {
+                new Region("AMS"),
+                new Region("LON"),
+                new Region("NYC"),
+                new Region("SGP"),
+                new Region("GRA")
             };
         }
 

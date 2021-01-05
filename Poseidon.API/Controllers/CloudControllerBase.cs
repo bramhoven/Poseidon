@@ -116,6 +116,17 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
+        ///     Getting all the regions.
+        /// </summary>
+        /// <returns></returns>
+        [Route("regions")]
+        [HttpGet]
+        public ActionResult<ICollection<InstanceSizeBase>> GetRegions()
+        {
+            return Ok(CloudManager.GetRegions());
+        }
+
+        /// <summary>
         ///     Gets a server in the ovh cloud.
         /// </summary>
         /// <param name="serverId">The server id</param>

@@ -104,6 +104,16 @@ namespace Poseidon.BusinessLayer.Cloud
             return _cloudDal.UpdateServer(server);
         }
 
+
+        /// <summary>
+        /// Gets the regions
+        /// </summary>
+        /// <returns></returns>
+        public object GetRegions()
+        {
+            return _cloudDal.getRegions();
+        }
+
         #endregion
     }
 }
