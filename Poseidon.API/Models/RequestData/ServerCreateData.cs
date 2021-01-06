@@ -8,6 +8,7 @@
         public string Name { get; set; }
         public string Region { get; set; }
         public string Size { get; set; }
+        public string SshKeyId { get; set; }
 
         #endregion
     }

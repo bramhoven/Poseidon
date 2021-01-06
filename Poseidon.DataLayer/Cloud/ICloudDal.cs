@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Poseidon.Models.Cloud;
+using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.DataLayer.Cloud
@@ -15,8 +16,9 @@ namespace Poseidon.DataLayer.Cloud
         /// <param name="size">The size of the sever</param>
         /// <param name="image">The image of the server</param>
         /// <param name="region">The region where the server should be deployed</param>
+        /// <param name="sshKeyId">The ssh key id</param>
         /// <returns>Whether request was successful</returns>
-        Server CreateServer(string name, string size, string image, string region);
+        Server CreateServer(string name, string size, string image, string region, string sshKeyId);
 
         /// <summary>
         ///     Get all available images for provider.
@@ -42,6 +44,12 @@ namespace Poseidon.DataLayer.Cloud
         /// <param name="serverId">The cloud server id</param>
         /// <returns></returns>
         Server GetServer(string serverId);
+
+        /// <summary>
+        ///     Get public ssh keys stored by cloud provider.
+        /// </summary>
+        /// <returns></returns>
+        ICollection<PublicSshKey> GetSshKeys();
 
         /// <summary>
         ///     Updates the server.

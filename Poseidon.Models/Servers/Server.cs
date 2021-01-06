@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Poseidon.Models.Scripts;
+using Poseidon.Models.Security;
 
 namespace Poseidon.Models.Servers
 {
@@ -44,6 +45,11 @@ namespace Poseidon.Models.Servers
         ///     The name of the server.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        ///     The public ssh keys connected to this server.
+        /// </summary>
+        public PublicSshKey PublicSshKey { get; set; }
 
         #endregion
     }

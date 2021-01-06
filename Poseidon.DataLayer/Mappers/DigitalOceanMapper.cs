@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DigitalOcean.API.Models.Responses;
+using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 using Region = Poseidon.Models.Cloud.Region;
 
@@ -58,6 +59,23 @@ namespace Poseidon.DataLayer.Mappers
                 IpAddresses = ipv4.Union(ipv6).ToList(),
                 MainIpAddress = droplet.Networks.V4.FirstOrDefault()?.IpAddress,
                 Name = droplet.Name
+            };
+        }
+
+
+        /// <summary>
+        ///     Maps the digital ocean key to the public ssh key model.
+        /// </summary>
+        /// <param name="doKey">The digital ocean ssh key</param>
+        /// <returns></returns>
+        internal static PublicSshKey MapKeyToPublicSshKey(Key doKey)
+        {
+            return new PublicSshKey
+            {
+                Id = doKey.Id.ToString(),
+                Name = doKey.Name,
+                Fingerprint = doKey.Fingerprint,
+                PublicKey = doKey.PublicKey
             };
         }
 

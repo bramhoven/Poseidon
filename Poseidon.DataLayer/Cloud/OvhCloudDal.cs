@@ -8,6 +8,7 @@ using Poseidon.DataLayer.Mappers;
 using Poseidon.Helpers.Settings;
 using Poseidon.Models.Cloud;
 using Poseidon.Models.Cloud.Ovh;
+using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.DataLayer.Cloud
@@ -55,7 +56,7 @@ namespace Poseidon.DataLayer.Cloud
 
         #region Methods
 
-        public Server CreateServer(string name, string size, string image, string region)
+        public Server CreateServer(string name, string size, string image, string region, string sshKeyId)
         {
             if (string.IsNullOrWhiteSpace(SettingsHelper.OvhProject))
                 throw new ArgumentException(nameof(SettingsHelper.OvhProject));
@@ -67,7 +68,8 @@ namespace Poseidon.DataLayer.Cloud
                 Name = name,
                 ImageId = image,
                 Region = region,
-                MonthlyBilling = true
+                MonthlyBilling = true,
+                SshKeyId = sshKeyId
             };
 
             try
@@ -150,6 +152,22 @@ namespace Poseidon.DataLayer.Cloud
             {
                 _logger.Error(e);
                 return null;
+            }
+        }
+
+        public ICollection<PublicSshKey> GetSshKeys()
+        {
+            var url = $"/cloud/project/{SettingsHelper.OvhProject}/sshkey";
+
+            try
+            {
+                var result = _client.GetAsync<ICollection<OvhSshKey>>(url).Result;
+                return result.Select(OvhMapper.MapOvhKeyToPublicSshKey).ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return new List<PublicSshKey>();
             }
         }
 

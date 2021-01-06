@@ -4,6 +4,7 @@ using System.Linq;
 using Poseidon.DataLayer.Mappers;
 using Poseidon.Models.Cloud;
 using Poseidon.Models.Cloud.Ovh;
+using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.DataLayer.Cloud
@@ -18,7 +19,7 @@ namespace Poseidon.DataLayer.Cloud
 
         #region Methods
 
-        public Server CreateServer(string name, string size, string image, string region)
+        public Server CreateServer(string name, string size, string image, string region, string sshKeyId)
         {
             var server = new Server
             {
@@ -63,6 +64,27 @@ namespace Poseidon.DataLayer.Cloud
             var server = MockedServerDatabase.First(s => s.Id.ToString() == serverId);
 
             return server;
+        }
+
+        public ICollection<PublicSshKey> GetSshKeys()
+        {
+            return new List<PublicSshKey>()
+            {
+                new PublicSshKey()
+                {
+                    Id = "1",
+                    Name = "Test key #1",
+                    PublicKey = "ssh-rsa test-key-01",
+                    Fingerprint = ""
+                },
+                new PublicSshKey()
+                {
+                    Id = "2",
+                    Name = "Test key #2",
+                    PublicKey = "ssh-rsa test-key-02",
+                    Fingerprint = ""
+                }
+            };
         }
 
         public Server UpdateServer(Server server)

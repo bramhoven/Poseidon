@@ -50,11 +50,28 @@ namespace Poseidon.Api.Controllers
         [HttpPost]
         public ActionResult<object> CreateServer(ServerCreateData serverCreateData)
         {
+            var errors = new List<string>();
+
+            if(string.IsNullOrWhiteSpace(serverCreateData.Name))
+                errors.Add($"Attribute {nameof(serverCreateData.Name)} is required");
+
+            if (string.IsNullOrWhiteSpace(serverCreateData.Size))
+                errors.Add($"Attribute {nameof(serverCreateData.Size)} is required");
+
+            if (string.IsNullOrWhiteSpace(serverCreateData.Image))
+                errors.Add($"Attribute {nameof(serverCreateData.Image)} is required");
+
+            if (string.IsNullOrWhiteSpace(serverCreateData.Region))
+                errors.Add($"Attribute {nameof(serverCreateData.Region)} is required");
+
+            if (string.IsNullOrWhiteSpace(serverCreateData.SshKeyId))
+                errors.Add($"Attribute {nameof(serverCreateData.SshKeyId)} is required");
+
             try
             {
                 var server = CloudManager.CreateServer(serverCreateData.Name, serverCreateData.Size,
                     serverCreateData.Image,
-                    serverCreateData.Region);
+                    serverCreateData.Region, serverCreateData.SshKeyId);
                 if (server != null)
                 {
                     ServerManager.InsertServer(server);
@@ -66,7 +83,27 @@ namespace Poseidon.Api.Controllers
                 Logger.Error(e);
             }
 
-            return BadRequest(new {Message = "Failed to create server"});
+            return BadRequest(new {Message = "Failed to create server", errors});
+        }
+
+        /// <summary>
+        ///     Gets the public keys at provider.
+        /// </summary>
+        /// <returns></returns>
+        [Route("sshkeys")]
+        [HttpGet]
+        public ActionResult<object> GetAllSshKeys()
+        {
+            try
+            {
+                return Ok(CloudManager.GetSshKeys());
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+            return BadRequest(new {Message = "Failed to update server"});
         }
 
         /// <summary>

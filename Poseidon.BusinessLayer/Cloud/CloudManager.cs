@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Poseidon.DataLayer.Cloud;
 using Poseidon.Models.Cloud;
+using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.BusinessLayer.Cloud
@@ -39,10 +39,11 @@ namespace Poseidon.BusinessLayer.Cloud
         /// <param name="name">The name of the server</param>
         /// <param name="size">The size of the sever</param>
         /// <param name="region">The region where the server should be deployed</param>
+        /// <param name="sshKeyId">The id of the ssh key to use with this server</param>
         /// <returns>The server</returns>
-        public Server CreateServer(string name, string size, string image, string region)
+        public Server CreateServer(string name, string size, string image, string region, string sshKeyId)
         {
-            return _cloudDal.CreateServer(name, size, image, region);
+            return _cloudDal.CreateServer(name, size, image, region, sshKeyId);
         }
 
         /// <summary>
@@ -84,6 +85,16 @@ namespace Poseidon.BusinessLayer.Cloud
             return _cloudDal.GetAvailableSizes().Where(size => size.Regions.Contains(region)).ToList();
         }
 
+
+        /// <summary>
+        ///     Gets the regions
+        /// </summary>
+        /// <returns></returns>
+        public object GetRegions()
+        {
+            return _cloudDal.getRegions();
+        }
+
         /// <summary>
         ///     Gets a server from cloud provider.
         /// </summary>
@@ -95,23 +106,22 @@ namespace Poseidon.BusinessLayer.Cloud
         }
 
         /// <summary>
-        /// Updates a server.
+        ///     Gets the public ssh keys from the provider.
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<PublicSshKey> GetSshKeys()
+        {
+            return _cloudDal.GetSshKeys();
+        }
+
+        /// <summary>
+        ///     Updates a server.
         /// </summary>
         /// <param name="server">The server to update</param>
         /// <returns></returns>
         public Server UpdateServer(Server server)
         {
             return _cloudDal.UpdateServer(server);
-        }
-
-
-        /// <summary>
-        /// Gets the regions
-        /// </summary>
-        /// <returns></returns>
-        public object GetRegions()
-        {
-            return _cloudDal.getRegions();
         }
 
         #endregion

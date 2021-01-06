@@ -7,6 +7,7 @@ using NLog;
 using Poseidon.DataLayer.Mappers;
 using Poseidon.Helpers.Settings;
 using Poseidon.Models.Cloud;
+using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.DataLayer.Cloud
@@ -42,16 +43,17 @@ namespace Poseidon.DataLayer.Cloud
 
         #region Methods
 
-        public Server CreateServer(string name, string size, string image, string region)
+        public Server CreateServer(string name, string size, string image, string region, string sshKeyId)
         {
             try
             {
-                var droplet = new Droplet()
+                var droplet = new Droplet
                 {
                     Image = image,
                     Name = name,
                     Region = region,
-                    Size = size
+                    Size = size,
+                    SshKeys = new List<object>() { sshKeyId }
                 };
                 var createdDroplet = _client.Droplets.Create(droplet).Result;
                 return DigitalOceanMapper.MapDropletToServer(createdDroplet);
@@ -130,6 +132,20 @@ namespace Poseidon.DataLayer.Cloud
             {
                 _logger.Error(e);
                 return null;
+            }
+        }
+
+        public ICollection<PublicSshKey> GetSshKeys()
+        {
+            try
+            {
+                var sshKeys = _client.Keys.GetAll().Result;
+                return sshKeys.Select(DigitalOceanMapper.MapKeyToPublicSshKey).ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return new List<PublicSshKey>();
             }
         }
 
