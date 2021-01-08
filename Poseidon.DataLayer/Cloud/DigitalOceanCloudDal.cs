@@ -17,6 +17,11 @@ namespace Poseidon.DataLayer.Cloud
         #region Fields
 
         /// <summary>
+        ///     The cloud provider.
+        /// </summary>
+        private static CloudProvider _cloudProvider;
+
+        /// <summary>
         ///     The digital ocean client.
         /// </summary>
         private readonly DigitalOceanClient _client;
@@ -43,6 +48,11 @@ namespace Poseidon.DataLayer.Cloud
 
         #region Methods
 
+        public void ConfigureProvider(ICloudProviderDal cloudProviderDal)
+        {
+            _cloudProvider = cloudProviderDal.GetCloudProviderByType(CloudProviderType.DigitalOcean);
+        }
+
         public Server CreateServer(string name, string size, string image, string region, string sshKeyId)
         {
             try
@@ -53,15 +63,31 @@ namespace Poseidon.DataLayer.Cloud
                     Name = name,
                     Region = region,
                     Size = size,
-                    SshKeys = new List<object>() { sshKeyId }
+                    SshKeys = new List<object> {sshKeyId}
                 };
                 var createdDroplet = _client.Droplets.Create(droplet).Result;
-                return DigitalOceanMapper.MapDropletToServer(createdDroplet);
+                var server = DigitalOceanMapper.MapDropletToServer(createdDroplet);
+                server.CloudProvider = _cloudProvider;
+                return server;
             }
             catch (Exception e)
             {
                 _logger.Error(e);
                 return null;
+            }
+        }
+
+        public bool DeleteServer(string cloudId)
+        {
+            try
+            {
+                var result = _client.Droplets.Delete(long.Parse(cloudId));
+                return result.IsCompleted && !result.IsCanceled && !result.IsFaulted;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return false;
             }
         }
 
@@ -112,20 +138,8 @@ namespace Poseidon.DataLayer.Cloud
             try
             {
                 var droplet = _client.Droplets.Get(long.Parse(serverId)).Result;
-                return DigitalOceanMapper.MapDropletToServer(droplet);
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e);
-                return null;
-            }
-        }
-
-        public Server UpdateServer(Server server)
-        {
-            try
-            {
-                _client.DropletActions.Rename(long.Parse(server.CloudId), server.Name);
+                var server = DigitalOceanMapper.MapDropletToServer(droplet);
+                server.CloudProvider = _cloudProvider;
                 return server;
             }
             catch (Exception e)
@@ -146,6 +160,20 @@ namespace Poseidon.DataLayer.Cloud
             {
                 _logger.Error(e);
                 return new List<PublicSshKey>();
+            }
+        }
+
+        public Server UpdateServer(Server server)
+        {
+            try
+            {
+                _client.DropletActions.Rename(long.Parse(server.CloudId), server.Name);
+                return server;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
             }
         }
 

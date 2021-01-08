@@ -10,47 +10,47 @@ namespace Poseidon.Models.Cloud
         /// <summary>
         ///     The amount of cpu's.
         /// </summary>
-        public int Cpu { get; internal set; }
+        public int Cpu { get; set; }
 
         /// <summary>
         ///     The amount of gpu's.
         /// </summary>
-        public int Gpu { get; internal set; }
+        public int Gpu { get; set; }
 
         /// <summary>
         ///     The id of the size.
         /// </summary>
-        public string Id { get; internal set; }
+        public string Id { get; set; }
 
         /// <summary>
         ///     The name of the size.
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; set; }
 
         /// <summary>
         ///     The amount of ram.
         /// </summary>
-        public int Ram { get; internal set; }
+        public int Ram { get; set; }
 
         /// <summary>
         ///     The regions where this size can be used.
         /// </summary>
-        public ICollection<string> Regions { get; internal set; }
+        public ICollection<string> Regions { get; set; }
 
         /// <summary>
         ///     The short name for this size.
         /// </summary>
-        public string Slug { get; internal set; }
+        public string Slug { get; set; }
 
         /// <summary>
         ///     The amount of storage.
         /// </summary>
-        public int Storage { get; internal set; }
+        public int Storage { get; set; }
 
         /// <summary>
         ///     The amount of network transfer.
         /// </summary>
-        public double Transfer { get; internal set; }
+        public double Transfer { get; set; }
 
         #endregion
 

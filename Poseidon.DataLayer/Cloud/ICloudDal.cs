@@ -10,6 +10,12 @@ namespace Poseidon.DataLayer.Cloud
         #region Methods
 
         /// <summary>
+        ///     Configures the provider.
+        /// </summary>
+        /// <param name="cloudProviderDal">The server context</param>
+        void ConfigureProvider(ICloudProviderDal cloudProviderDal);
+
+        /// <summary>
         ///     Create a server.
         /// </summary>
         /// <param name="name">The name of the server</param>
@@ -19,6 +25,13 @@ namespace Poseidon.DataLayer.Cloud
         /// <param name="sshKeyId">The ssh key id</param>
         /// <returns>Whether request was successful</returns>
         Server CreateServer(string name, string size, string image, string region, string sshKeyId);
+
+        /// <summary>
+        ///     Delets a server based on it's cloud id.
+        /// </summary>
+        /// <param name="cloudId">The cloud id</param>
+        /// <returns></returns>
+        bool DeleteServer(string cloudId);
 
         /// <summary>
         ///     Get all available images for provider.

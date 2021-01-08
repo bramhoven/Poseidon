@@ -18,6 +18,11 @@ namespace Poseidon.DataLayer.Cloud
         #region Fields
 
         /// <summary>
+        ///     The cloud provider.
+        /// </summary>
+        private static CloudProvider _cloudProvider;
+
+        /// <summary>
         ///     The ovh api client.
         /// </summary>
         private readonly Client _client;
@@ -56,6 +61,11 @@ namespace Poseidon.DataLayer.Cloud
 
         #region Methods
 
+        public void ConfigureProvider(ICloudProviderDal cloudProviderDal)
+        {
+            _cloudProvider = cloudProviderDal.GetCloudProviderByType(CloudProviderType.Ovh);
+        }
+
         public Server CreateServer(string name, string size, string image, string region, string sshKeyId)
         {
             if (string.IsNullOrWhiteSpace(SettingsHelper.OvhProject))
@@ -87,6 +97,22 @@ namespace Poseidon.DataLayer.Cloud
             {
                 _logger.Error(e);
                 return null;
+            }
+        }
+
+        public bool DeleteServer(string cloudId)
+        {
+            var url = $"/cloud/project/{SettingsHelper.OvhProject}/instance/{cloudId}";
+
+            try
+            {
+                var result = _client.DeleteAsync<OvhServer>(url).Result;
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return false;
             }
         }
 

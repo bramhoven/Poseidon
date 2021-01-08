@@ -14,6 +14,13 @@ namespace Poseidon.DataLayer.Contexts.ServerContext
         {
         }
 
+        /// <summary>
+        ///     Initialize new instance of <see cref="MysqlServerContext" />.
+        /// </summary>
+        public MysqlServerContext()
+        {
+        }
+
         #endregion
     }
 }

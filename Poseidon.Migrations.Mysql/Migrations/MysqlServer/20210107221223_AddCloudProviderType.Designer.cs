@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poseidon.DataLayer.Contexts.ServerContext;
 
 namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
 {
     [DbContext(typeof(MysqlServerContext))]
-    partial class MysqlServerContextModelSnapshot : ModelSnapshot
+    [Migration("20210107221223_AddCloudProviderType")]
+    partial class AddCloudProviderType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +29,6 @@ namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Slug")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -101,6 +100,9 @@ namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
                     b.Property<string>("CloudId")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int?>("CloudProviderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("InstallationScriptLocation")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -114,6 +116,8 @@ namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CloudProviderId");
 
                     b.HasIndex("PublicSshKeyId");
 
@@ -136,6 +140,10 @@ namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
 
             modelBuilder.Entity("Poseidon.Models.Servers.Server", b =>
                 {
+                    b.HasOne("Poseidon.Models.Cloud.CloudProvider", "CloudProvider")
+                        .WithMany()
+                        .HasForeignKey("CloudProviderId");
+
                     b.HasOne("Poseidon.Models.Security.PublicSshKey", "PublicSshKey")
                         .WithMany()
                         .HasForeignKey("PublicSshKeyId");

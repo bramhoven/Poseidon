@@ -47,6 +47,16 @@ namespace Poseidon.BusinessLayer.Cloud
         }
 
         /// <summary>
+        ///     Delets a server based on cloud id.
+        /// </summary>
+        /// <param name="cloudId">The cloud id</param>
+        /// <returns></returns>
+        public bool DeleteServer(string cloudId)
+        {
+            return _cloudDal.DeleteServer(cloudId);
+        }
+
+        /// <summary>
         ///     Get all available sizes for provider.
         /// </summary>
         /// <returns></returns>

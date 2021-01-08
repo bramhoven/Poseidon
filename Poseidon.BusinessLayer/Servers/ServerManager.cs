@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog;
+using Poseidon.BusinessLayer.Cloud;
+using Poseidon.DataLayer.Cloud;
 using Poseidon.DataLayer.Servers;
+using Poseidon.Models.Cloud;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.BusinessLayer.Servers
@@ -44,7 +47,27 @@ namespace Poseidon.BusinessLayer.Servers
         /// <returns></returns>
         public bool DeleteServer(Server server)
         {
-            return _serverDal.DeleteServer(server);
+            return DeleteServer(server.Id.ToString());
+        }
+
+        /// <summary>
+        ///     Deletes the server.
+        /// </summary>
+        /// <param name="serverId">The server id</param>
+        /// <returns></returns>
+        public bool DeleteServer(string serverId)
+        {
+            var server = GetServer(serverId);
+            if (server == null)
+                throw new Exception($"Cannot find server for id {serverId}");
+
+            var cloudDal = CloudManagerHelper.GetDalForServer(server, _serverDal.GetServerContext());
+            if(cloudDal == null)
+                throw new Exception($"Cannot find cloud dal for server");
+
+            var cloudManager = new CloudManager(cloudDal);
+            var cloudServer = cloudManager.GetServer(server.CloudId);
+            return cloudServer != null ? cloudManager.DeleteServer(server.CloudId) : true && _serverDal.DeleteServer(server);
         }
 
         /// <summary>
@@ -55,6 +78,16 @@ namespace Poseidon.BusinessLayer.Servers
         public Server GetServer(Guid id)
         {
             return _serverDal.GetServer(id);
+        }
+
+        /// <summary>
+        ///     Get server by cloud id.
+        /// </summary>
+        /// <param name="id">The id of the server</param>
+        /// <returns></returns>
+        public Server GetServerByCloudId(string cloudId)
+        {
+            return _serverDal.GetServerByCloudId(cloudId);
         }
 
         /// <summary>

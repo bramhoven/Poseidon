@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Poseidon.Models.Cloud;
 using Poseidon.Models.Scripts;
 using Poseidon.Models.Security;
 
@@ -14,6 +15,23 @@ namespace Poseidon.Models.Servers
         ///     The id given to this server by the cloud provider.
         /// </summary>
         public string CloudId { get; set; }
+
+        /// <summary>
+        ///     The cloud provider where this server is hosted.
+        /// </summary>
+        [NotMapped]
+        public CloudProvider CloudProvider { get; set; }
+
+        /// <summary>
+        ///     The cloud provider id.
+        /// </summary>
+        public int CloudProviderId
+        {
+            get
+            {
+                return CloudProvider?.Id ?? 0;
+            }
+        }
 
         /// <summary>
         ///     The id given by Sertar.

@@ -1,4 +1,6 @@
-﻿namespace Poseidon.Models.Security
+﻿using Poseidon.Models.Cloud;
+
+namespace Poseidon.Models.Security
 {
     public class PublicSshKey
     {
@@ -8,6 +10,7 @@
         public string Id { get; set; }
         public string Name { get; set; }
         public string PublicKey { get; set; }
+        public CloudProvider Provider { get; set; }
 
         #endregion
     }

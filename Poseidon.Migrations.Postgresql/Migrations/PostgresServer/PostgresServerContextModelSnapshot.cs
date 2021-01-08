@@ -19,11 +19,59 @@ namespace Poseidon.Migrations.Postgres.Migrations.PostgresServer
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("Sertar.Models.Servers.IpAddress", b =>
+            modelBuilder.Entity("Poseidon.Models.Cloud.CloudProvider", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("CloudProviderType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CloudProviders");
+                });
+
+            modelBuilder.Entity("Poseidon.Models.Security.PublicSshKey", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Fingerprint")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ProviderId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PublicKey")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderId");
+
+                    b.ToTable("PublicSshKeys");
+                });
+
+            modelBuilder.Entity("Poseidon.Models.Servers.IpAddress", b =>
+                {
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Gateway")
+                        .HasColumnType("text");
 
                     b.Property<string>("Ip")
                         .HasColumnType("text");
@@ -31,19 +79,25 @@ namespace Poseidon.Migrations.Postgres.Migrations.PostgresServer
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("Netmask")
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("ServerId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ServerId");
 
-                    b.ToTable("IpAddress");
+                    b.ToTable("IpAddresses");
                 });
 
-            modelBuilder.Entity("Sertar.Models.Servers.Server", b =>
+            modelBuilder.Entity("Poseidon.Models.Servers.Server", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -59,16 +113,35 @@ namespace Poseidon.Migrations.Postgres.Migrations.PostgresServer
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("PublicSshKeyId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PublicSshKeyId");
 
                     b.ToTable("Servers");
                 });
 
-            modelBuilder.Entity("Sertar.Models.Servers.IpAddress", b =>
+            modelBuilder.Entity("Poseidon.Models.Security.PublicSshKey", b =>
                 {
-                    b.HasOne("Sertar.Models.Servers.Server", null)
+                    b.HasOne("Poseidon.Models.Cloud.CloudProvider", "Provider")
+                        .WithMany()
+                        .HasForeignKey("ProviderId");
+                });
+
+            modelBuilder.Entity("Poseidon.Models.Servers.IpAddress", b =>
+                {
+                    b.HasOne("Poseidon.Models.Servers.Server", null)
                         .WithMany("IpAddresses")
                         .HasForeignKey("ServerId");
+                });
+
+            modelBuilder.Entity("Poseidon.Models.Servers.Server", b =>
+                {
+                    b.HasOne("Poseidon.Models.Security.PublicSshKey", "PublicSshKey")
+                        .WithMany()
+                        .HasForeignKey("PublicSshKeyId");
                 });
 #pragma warning restore 612, 618
         }

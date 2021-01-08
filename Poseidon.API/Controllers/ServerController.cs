@@ -6,7 +6,7 @@ using Poseidon.DataLayer.Servers;
 
 namespace Poseidon.Api.Controllers
 {
-    [Route("/servers")]
+    [Route("/poseidon/servers")]
     [ApiController]
     public class ServerController : ControllerBase
     {
@@ -32,6 +32,51 @@ namespace Poseidon.Api.Controllers
         #endregion
 
         #region Methods
+
+        /// <summary>
+        ///     Deletes a server.
+        /// </summary>
+        /// <param name="serverId">The server id</param>
+        /// <returns></returns>
+        [Route("{serverId}")]
+        [HttpDelete]
+        public ActionResult<object> DeleteServer(string serverId)
+        {
+            try
+            {
+                if (ServerManager.DeleteServer(serverId))
+                    return Ok();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+            return BadRequest(new {Message = "Failed to delete server"});
+        }
+
+        /// <summary>
+        ///     Gets a server.
+        /// </summary>
+        /// <param name="serverId">The server id</param>
+        /// <returns></returns>
+        [Route("{serverId}")]
+        [HttpGet]
+        public ActionResult<object> GetServer(string serverId)
+        {
+            try
+            {
+                var server = ServerManager.GetServer(serverId);
+                if (server != null)
+                    return Ok(server);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+            return BadRequest(new {Message = "Failed to get server"});
+        }
 
         /// <summary>
         ///     Get all servers.

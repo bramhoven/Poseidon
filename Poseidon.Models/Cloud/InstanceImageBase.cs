@@ -10,37 +10,37 @@ namespace Poseidon.Models.Cloud
         /// <summary>
         ///     The description of this image.
         /// </summary>
-        public string Description { get; internal set; }
+        public string Description { get; set; }
 
         /// <summary>
         ///     The id of this image.
         /// </summary>
-        public string Id { get; internal set; }
+        public string Id { get; set; }
 
         /// <summary>
         ///     The name of this image.
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; set; }
 
         /// <summary>
         ///     The os of this image.
         /// </summary>
-        public string Os { get; internal set; }
+        public string Os { get; set; }
 
         /// <summary>
         ///     The regions in which this image can be used.
         /// </summary>
-        public ICollection<string> Regions { get; internal set; }
+        public ICollection<string> Regions { get; set; }
 
         /// <summary>
         ///     The shortname for this image.
         /// </summary>
-        public string Slug { get; internal set; }
+        public string Slug { get; set; }
 
         /// <summary>
         ///     The tags for this image.
         /// </summary>
-        public ICollection<string> Tags { get; internal set; }
+        public ICollection<string> Tags { get; set; }
 
         #endregion
 

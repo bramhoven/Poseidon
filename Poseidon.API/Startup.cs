@@ -1,14 +1,18 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Poseidon.Helpers.Settings;
+using Poseidon.BusinessLayer.Cloud;
+using Poseidon.DataLayer.Cloud;
 using Poseidon.DataLayer.Contexts.ServerContext;
 using Poseidon.DataLayer.Contexts.UserContext;
 using Poseidon.DataLayer.Servers;
 using Poseidon.DataLayer.Users;
+using Poseidon.Helpers.Settings;
+using Poseidon.Models.Cloud;
 
 namespace Poseidon.API
 {
@@ -39,7 +43,8 @@ namespace Poseidon.API
         #region Methods
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbUserContext userContext, DbServerContext serverContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbUserContext userContext,
+            DbServerContext serverContext, ICloudProviderDal cloudProviderDal)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +66,8 @@ namespace Poseidon.API
             userContext.Database.Migrate();
             serverContext.Database.EnsureCreated();
             serverContext.Database.Migrate();
+
+            CloudManagerHelper.ConfigureCloudProviders(cloudProviderDal);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -69,16 +76,15 @@ namespace Poseidon.API
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin().AllowAnyHeader();
-                    });
+                    builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
             });
 
             ConfigureDatabases(services);
 
+
             services.AddScoped<IServerDal, ServerDal>();
             services.AddScoped<IUserDal, UserDal>();
+            services.AddScoped<ICloudProviderDal, CloudProviderDal>();
 
             services.AddControllers();
         }
@@ -92,30 +98,32 @@ namespace Poseidon.API
                 {
                     services.AddDbContext<DbUserContext, PostgresUserContext>(options =>
                         options.UseNpgsql(Configuration.GetConnectionString("UserDatabase"),
-                            b => b.MigrationsAssembly("Poseidon.Migrations.Postgres")));
+                            b => b.MigrationsAssembly("Poseidon.Migrations.Postgres")), ServiceLifetime.Transient);
                     break;
                 }
                 case "mysql":
                 {
                     services.AddDbContext<DbUserContext, MysqlUserContext>(options =>
                         options.UseMySql(Configuration.GetConnectionString("UserDatabase"),
-                            b => b.MigrationsAssembly("Poseidon.Migrations.Mysql")));
+                            b => b.MigrationsAssembly("Poseidon.Migrations.Mysql")), ServiceLifetime.Transient);
                     break;
                 }
             }
 
-            switch (Configuration.GetValue<string>("DatabaseTypes:ServerDatabase", "mysql"))
+            switch (Configuration.GetValue("DatabaseTypes:ServerDatabase", "mysql"))
             {
                 case "postgres":
                 {
                     services.AddDbContext<DbServerContext, PostgresServerContext>(options =>
-                        options.UseNpgsql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Poseidon.Migrations.Postgres")));
+                        options.UseNpgsql(Configuration.GetConnectionString("ServerDatabase"),
+                            b => b.MigrationsAssembly("Poseidon.Migrations.Postgres")), ServiceLifetime.Transient);
                     break;
                 }
                 case "mysql":
                 {
                     services.AddDbContext<DbServerContext, MysqlServerContext>(options =>
-                        options.UseMySql(Configuration.GetConnectionString("ServerDatabase"), b => b.MigrationsAssembly("Poseidon.Migrations.Mysql")));
+                        options.UseMySql(Configuration.GetConnectionString("ServerDatabase"),
+                            b => b.MigrationsAssembly("Poseidon.Migrations.Mysql")), ServiceLifetime.Transient);
                     break;
                 }
             }

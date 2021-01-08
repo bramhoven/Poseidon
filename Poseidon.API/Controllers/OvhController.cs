@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Poseidon.BusinessLayer.Cloud;
+using Poseidon.DataLayer.Cloud;
 using Poseidon.DataLayer.Servers;
 
 namespace Poseidon.Api.Controllers
@@ -10,7 +11,7 @@ namespace Poseidon.Api.Controllers
     {
         #region Constructors
 
-        public OvhController(IServerDal serverDal) : base(serverDal, CloudManagerHelper.GetOvhDal())
+        public OvhController(IServerDal serverDal, ICloudProviderDal cloudProviderDal) : base(serverDal, CloudManagerHelper.GetOvhDal(), cloudProviderDal)
         {
         }
 

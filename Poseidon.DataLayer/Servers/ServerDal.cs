@@ -66,6 +66,24 @@ namespace Poseidon.DataLayer.Servers
             }
         }
 
+        public Server GetServerByCloudId(string cloudId)
+        {
+            try
+            {
+                return _serverContext.Servers.FirstOrDefault(server => server.CloudId == cloudId);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e);
+                return null;
+            }
+        }
+
+        public DbServerContext GetServerContext()
+        {
+            return _serverContext;
+        }
+
         public ICollection<Server> GetServers()
         {
             return _serverContext.Servers.ToList();

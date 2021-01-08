@@ -14,6 +14,13 @@ namespace Poseidon.DataLayer.Contexts.UserContext
         {
         }
 
+        /// <summary>
+        ///     Initialize new instance of <see cref="MysqlUserContext" />.
+        /// </summary>
+        public MysqlUserContext()
+        { 
+        }
+
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Poseidon.DataLayer.Contexts.ServerContext;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.DataLayer.Servers
@@ -16,11 +17,24 @@ namespace Poseidon.DataLayer.Servers
         bool DeleteServer(Server server);
 
         /// <summary>
-        /// Gets a server.
+        ///     Gets a server.
         /// </summary>
         /// <param name="id">The id of the server</param>
         /// <returns></returns>
         Server GetServer(Guid id);
+
+        /// <summary>
+        ///     Gets a server by cloud id.
+        /// </summary>
+        /// <param name="cloudId">The cloud id of the server</param>
+        /// <returns></returns>
+        Server GetServerByCloudId(string cloudId);
+
+        /// <summary>
+        ///     Gets the server context.
+        /// </summary>
+        /// <returns></returns>
+        DbServerContext GetServerContext();
 
         /// <summary>
         ///     Get servers.

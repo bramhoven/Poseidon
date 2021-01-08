@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Poseidon.Models.Cloud;
+using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.DataLayer.Contexts.ServerContext
@@ -8,6 +10,9 @@ namespace Poseidon.DataLayer.Contexts.ServerContext
         #region Properties
 
         public DbSet<Server> Servers { get; set; }
+        public DbSet<IpAddress> IpAddresses { get; set; }
+        public DbSet<Models.Cloud.CloudProvider> CloudProviders { get; set; }
+        public DbSet<PublicSshKey> PublicSshKeys { get; set; }
 
         #endregion
 
@@ -27,6 +32,13 @@ namespace Poseidon.DataLayer.Contexts.ServerContext
         /// </summary>
         /// <param name="options">The db context options</param>
         public DbServerContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        /// <summary>
+        ///     Initialize new instance of <see cref="DbServerContext" />
+        /// </summary>
+        public DbServerContext()
         {
         }
 

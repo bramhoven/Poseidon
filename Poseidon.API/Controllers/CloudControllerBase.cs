@@ -31,9 +31,10 @@ namespace Poseidon.Api.Controllers
 
         #region Constructors
 
-        public CloudControllerBase(IServerDal serverDal, ICloudDal cloudDal)
+        public CloudControllerBase(IServerDal serverDal, ICloudDal cloudDal, ICloudProviderDal cloudProviderDal)
         {
             ServerManager = new ServerManager(serverDal);
+            cloudDal.ConfigureProvider(cloudProviderDal);
             CloudManager = new CloudManager(cloudDal);
         }
 
@@ -42,7 +43,7 @@ namespace Poseidon.Api.Controllers
         #region Methods
 
         /// <summary>
-        ///     Create a server in the ovh cloud.
+        ///     Create a server.
         /// </summary>
         /// <param name="serverCreateData">The server data</param>
         /// <returns></returns>
@@ -52,7 +53,7 @@ namespace Poseidon.Api.Controllers
         {
             var errors = new List<string>();
 
-            if(string.IsNullOrWhiteSpace(serverCreateData.Name))
+            if (string.IsNullOrWhiteSpace(serverCreateData.Name))
                 errors.Add($"Attribute {nameof(serverCreateData.Name)} is required");
 
             if (string.IsNullOrWhiteSpace(serverCreateData.Size))
@@ -87,6 +88,33 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
+        ///     Deletes a server.
+        /// </summary>
+        /// <param name="cloudId">The server id</param>
+        /// <returns></returns>
+        [Route("servers/{cloudId}")]
+        [HttpDelete]
+        public ActionResult<object> DeleteServer(string cloudId)
+        {
+            try
+            {
+                var server = ServerManager.GetServerByCloudId(cloudId);
+
+                if(server == null)
+                    return BadRequest(new { Message = $"Failed to delete server with cloud id: {cloudId}" });
+
+                if (ServerManager.DeleteServer(cloudId))
+                    return Ok();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+            return BadRequest(new {Message = "Failed to delete server"});
+        }
+
+        /// <summary>
         ///     Gets the public keys at provider.
         /// </summary>
         /// <returns></returns>
@@ -107,7 +135,7 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
-        ///     Getting ovh's available images.
+        ///     Getting the available images.
         /// </summary>
         /// <returns></returns>
         [Route("images")]
@@ -118,7 +146,7 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
-        ///     Getting ovh's available images by region.
+        ///     Getting the available images by region.
         /// </summary>
         /// <param name="region">The region to filter by</param>
         /// <returns></returns>
@@ -130,7 +158,7 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
-        ///     Getting ovh's available sizes.
+        ///     Getting the available sizes.
         /// </summary>
         /// <returns></returns>
         [Route("sizes")]
@@ -141,7 +169,7 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
-        ///     Getting ovh's available sizes by region.
+        ///     Getting the available sizes by region.
         /// </summary>
         /// <param name="region">The region to filter by</param>
         /// <returns></returns>
@@ -164,17 +192,17 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
-        ///     Gets a server in the ovh cloud.
+        ///     Gets a server.
         /// </summary>
-        /// <param name="serverId">The server id</param>
+        /// <param name="cloudId">The server id</param>
         /// <returns></returns>
-        [Route("servers/{serverId}")]
+        [Route("servers/{cloudId}")]
         [HttpGet]
-        public ActionResult<object> GetServer(string serverId)
+        public ActionResult<object> GetServer(string cloudId)
         {
             try
             {
-                var server = CloudManager.GetServer(serverId);
+                var server = CloudManager.GetServer(cloudId);
                 if (server != null)
                     return Ok(server);
             }
@@ -187,7 +215,7 @@ namespace Poseidon.Api.Controllers
         }
 
         /// <summary>
-        ///     Updates a server in the ovh cloud.
+        ///     Updates a server.
         /// </summary>
         /// <param name="serverUpdateData">The server data to update</param>
         /// <returns></returns>

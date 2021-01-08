@@ -31,6 +31,13 @@ namespace Poseidon.DataLayer.Contexts.UserContext
         {
         }
 
+        /// <summary>
+        ///     Initialize new instance of <see cref="DbUserContext" />
+        /// </summary>
+        public DbUserContext()
+        {
+        }
+
         #endregion
     }
 }
