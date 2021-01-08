@@ -33,7 +33,7 @@ namespace Poseidon.Api.Controllers
 
         public CloudControllerBase(IServerDal serverDal, ICloudDal cloudDal, ICloudProviderDal cloudProviderDal)
         {
-            ServerManager = new ServerManager(serverDal);
+            ServerManager = new ServerManager(serverDal, cloudProviderDal);
             cloudDal.ConfigureProvider(cloudProviderDal);
             CloudManager = new CloudManager(cloudDal);
         }

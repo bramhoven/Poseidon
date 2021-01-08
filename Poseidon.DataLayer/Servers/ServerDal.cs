@@ -70,7 +70,7 @@ namespace Poseidon.DataLayer.Servers
         {
             try
             {
-                return _serverContext.Servers.FirstOrDefault(server => server.CloudId == cloudId);
+                return _serverContext.Servers.FirstOrDefault(server => server.CloudId.Equals(cloudId));
             }
             catch (Exception e)
             {

@@ -54,9 +54,9 @@ namespace Poseidon.DataLayer.Cloud
         /// <summary>
         ///     Gets a server from the cloud provider.
         /// </summary>
-        /// <param name="serverId">The cloud server id</param>
+        /// <param name="cloudId">The cloud server id</param>
         /// <returns></returns>
-        Server GetServer(string serverId);
+        Server GetServer(string cloudId);
 
         /// <summary>
         ///     Get public ssh keys stored by cloud provider.

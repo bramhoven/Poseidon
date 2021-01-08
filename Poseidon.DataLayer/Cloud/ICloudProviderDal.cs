@@ -14,6 +14,13 @@ namespace Poseidon.DataLayer.Cloud
         void AddCloudProvider(CloudProvider cloudProvider);
 
         /// <summary>
+        ///     Get cloud provider by id.
+        /// </summary>
+        /// <param name="cloudProviderId">The cloud provider id</param>
+        /// <returns></returns>
+        CloudProvider GetCloudProvider(int cloudProviderId);
+
+        /// <summary>
         ///     Get cloud provider by type.
         /// </summary>
         /// <param name="cloudProviderType">The cloud provider type</param>

@@ -29,9 +29,9 @@ namespace Poseidon.Api.Controllers
 
         #region Constructors
 
-        public StatisticsController(IServerDal serverDal, IUserDal userDal)
+        public StatisticsController(IServerDal serverDal, IUserDal userDal, ICloudProviderDal cloudProviderDal)
         {
-            _serverManager = new ServerManager(serverDal);
+            _serverManager = new ServerManager(serverDal, cloudProviderDal);
             _userManager = new UserManager(userDal, null);
         }
 

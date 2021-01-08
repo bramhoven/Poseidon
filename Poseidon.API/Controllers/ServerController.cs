@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using Poseidon.BusinessLayer.Servers;
+using Poseidon.DataLayer.Cloud;
 using Poseidon.DataLayer.Servers;
 
 namespace Poseidon.Api.Controllers
@@ -24,9 +25,9 @@ namespace Poseidon.Api.Controllers
 
         #region Constructors
 
-        public ServerController(IServerDal serverDal)
+        public ServerController(IServerDal serverDal, ICloudProviderDal cloudProviderDal)
         {
-            ServerManager = new ServerManager(serverDal);
+            ServerManager = new ServerManager(serverDal, cloudProviderDal);
         }
 
         #endregion

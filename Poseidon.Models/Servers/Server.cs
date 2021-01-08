@@ -9,6 +9,12 @@ namespace Poseidon.Models.Servers
 {
     public class Server
     {
+        #region Fields
+
+        private CloudProvider _cloudProvider;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -20,18 +26,20 @@ namespace Poseidon.Models.Servers
         ///     The cloud provider where this server is hosted.
         /// </summary>
         [NotMapped]
-        public CloudProvider CloudProvider { get; set; }
+        public CloudProvider CloudProvider
+        {
+            get => _cloudProvider;
+            set
+            {
+                _cloudProvider = value;
+                CloudProviderId = _cloudProvider?.Id ?? 0;
+            }
+        }
 
         /// <summary>
         ///     The cloud provider id.
         /// </summary>
-        public int CloudProviderId
-        {
-            get
-            {
-                return CloudProvider?.Id ?? 0;
-            }
-        }
+        public int? CloudProviderId { get; set; }
 
         /// <summary>
         ///     The id given by Sertar.

@@ -58,7 +58,7 @@ namespace Poseidon.BusinessLayer.Cloud
         /// </summary>
         /// <param name="server">The server</param>
         /// <returns></returns>
-        public static ICloudDal GetDalForServer(Server server, DbServerContext serverContext)
+        public static ICloudDal GetDalForServer(Server server)
         {
             if (server.CloudProvider == null)
                 return null;

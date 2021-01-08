@@ -4,7 +4,6 @@ using NLog;
 using Poseidon.BusinessLayer.Cloud;
 using Poseidon.DataLayer.Cloud;
 using Poseidon.DataLayer.Servers;
-using Poseidon.Models.Cloud;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.BusinessLayer.Servers
@@ -12,6 +11,11 @@ namespace Poseidon.BusinessLayer.Servers
     public class ServerManager
     {
         #region Fields
+
+        /// <summary>
+        ///     The cloud provider dal.
+        /// </summary>
+        private readonly ICloudProviderDal _cloudProviderDal;
 
         /// <summary>
         ///     The logger.
@@ -30,10 +34,12 @@ namespace Poseidon.BusinessLayer.Servers
         /// <summary>
         ///     Instantiates a new instance of <see cref="ServerManager" />
         /// </summary>
-        /// <param name="serverDal"></param>
-        public ServerManager(IServerDal serverDal)
+        /// <param name="serverDal">The server provider dal</param>
+        /// <param name="cloudProviderDal">The cloud provider dal</param>
+        public ServerManager(IServerDal serverDal, ICloudProviderDal cloudProviderDal)
         {
             _serverDal = serverDal;
+            _cloudProviderDal = cloudProviderDal;
         }
 
         #endregion
@@ -61,13 +67,15 @@ namespace Poseidon.BusinessLayer.Servers
             if (server == null)
                 throw new Exception($"Cannot find server for id {serverId}");
 
-            var cloudDal = CloudManagerHelper.GetDalForServer(server, _serverDal.GetServerContext());
-            if(cloudDal == null)
-                throw new Exception($"Cannot find cloud dal for server");
+            var cloudDal = CloudManagerHelper.GetDalForServer(server);
+            if (cloudDal == null)
+                throw new Exception("Cannot find cloud dal for server");
 
             var cloudManager = new CloudManager(cloudDal);
             var cloudServer = cloudManager.GetServer(server.CloudId);
-            return cloudServer != null ? cloudManager.DeleteServer(server.CloudId) : true && _serverDal.DeleteServer(server);
+            return cloudServer != null
+                ? cloudManager.DeleteServer(server.CloudId)
+                : true && _serverDal.DeleteServer(server);
         }
 
         /// <summary>
@@ -81,23 +89,29 @@ namespace Poseidon.BusinessLayer.Servers
         }
 
         /// <summary>
-        ///     Get server by cloud id.
-        /// </summary>
-        /// <param name="id">The id of the server</param>
-        /// <returns></returns>
-        public Server GetServerByCloudId(string cloudId)
-        {
-            return _serverDal.GetServerByCloudId(cloudId);
-        }
-
-        /// <summary>
         ///     Get server by id as string.
         /// </summary>
         /// <param name="id">The id of the server as string</param>
         /// <returns></returns>
         public Server GetServer(string id)
         {
-            return _serverDal.GetServer(Guid.Parse(id));
+            var server = _serverDal.GetServer(Guid.Parse(id));
+            if(server.CloudProviderId != null && server.CloudProviderId > 0)
+                server.CloudProvider = _cloudProviderDal.GetCloudProvider(server.CloudProviderId ?? 0);
+            return server;
+        }
+
+        /// <summary>
+        ///     Get server by cloud id.
+        /// </summary>
+        /// <param name="id">The id of the server</param>
+        /// <returns></returns>
+        public Server GetServerByCloudId(string cloudId)
+        {
+            var server = _serverDal.GetServerByCloudId(cloudId);
+            if (server.CloudProviderId != null && server.CloudProviderId > 0)
+                server.CloudProvider = _cloudProviderDal.GetCloudProvider(server.CloudProviderId ?? 0);
+            return server;
         }
 
         /// <summary>
@@ -106,7 +120,11 @@ namespace Poseidon.BusinessLayer.Servers
         /// <returns></returns>
         public ICollection<Server> GetServers()
         {
-            return _serverDal.GetServers();
+            var servers = _serverDal.GetServers();
+            foreach (var server in servers)
+                if (server.CloudProviderId != null && server.CloudProviderId > 0)
+                    server.CloudProvider = _cloudProviderDal.GetCloudProvider(server.CloudProviderId ?? 0);
+            return servers;
         }
 
         /// <summary>

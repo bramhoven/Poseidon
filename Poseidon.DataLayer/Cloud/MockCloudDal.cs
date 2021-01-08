@@ -183,10 +183,9 @@ namespace Poseidon.DataLayer.Cloud
             };
         }
 
-        public Server GetServer(string serverId)
+        public Server GetServer(string cloudId)
         {
-            var server = MockedServerDatabase.First(s => s.Id.ToString() == serverId);
-
+            var server = MockedServerDatabase.FirstOrDefault(s => s.Id.ToString() == cloudId);
             return server;
         }
 

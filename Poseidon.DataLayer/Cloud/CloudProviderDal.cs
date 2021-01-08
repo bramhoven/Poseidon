@@ -44,6 +44,11 @@ namespace Poseidon.DataLayer.Cloud
             _serverContext.SaveChanges();
         }
 
+        public CloudProvider GetCloudProvider(int cloudProviderId)
+        {
+            return _serverContext.CloudProviders.FirstOrDefault(provider => provider.Id == cloudProviderId);
+        }
+
         public CloudProvider GetCloudProviderByType(CloudProviderType cloudProviderType)
         {
             return _serverContext.CloudProviders.FirstOrDefault(provider =>
