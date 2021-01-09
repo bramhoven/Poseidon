@@ -19,6 +19,16 @@ namespace Poseidon.Helpers.Settings
             _configuration.GetValue<string>("CloudCredentials:DigitalOcean:ApiKey");
 
         /// <summary>
+        ///     The fauna db endpoint.
+        /// </summary>
+        public static string FaunaDbEndpoint => _configuration.GetValue<string>("Credentials:FaunaDb:Endpoint");
+
+        /// <summary>
+        ///     The fauna db key.
+        /// </summary>
+        public static string FaunaDbKey => _configuration.GetValue<string>("Credentials:FaunaDb:Key");
+
+        /// <summary>
         ///     Gets whether digital ocean should be mocked.
         /// </summary>
         public static bool MockDigitalOcean => _configuration.GetValue<bool>("Mocked:DigitalOcean");

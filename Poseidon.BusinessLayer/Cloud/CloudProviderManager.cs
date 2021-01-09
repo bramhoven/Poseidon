@@ -29,6 +29,15 @@ namespace Poseidon.BusinessLayer.Cloud
         #endregion
 
         #region Methods
+        /// <summary>
+        ///     Get cloud provider by id.
+        /// </summary>
+        /// <param name="cloudProviderId">The cloud provider id</param>
+        /// <returns></returns>
+        public CloudProvider GetCloudProvider(int cloudProviderId)
+        {
+            return _cloudProviderDal.GetCloudProvider(cloudProviderId);
+        }
 
         /// <summary>
         ///     Get cloud provider by type.
