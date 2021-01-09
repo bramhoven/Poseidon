@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FaunaDB.Client;
 using FaunaDB.Types;
+using NLog;
 using Poseidon.Helpers.Settings;
 using Poseidon.Models.HealthChecks;
 using static FaunaDB.Query.Language;
@@ -19,6 +20,8 @@ namespace Poseidon.DataLayer.HealthChecks
 
         #endregion
 
+        private ILogger Logger => LogManager.GetCurrentClassLogger();
+
         #region Constructors
 
         public FaunaHealthCheckDal()
@@ -32,7 +35,40 @@ namespace Poseidon.DataLayer.HealthChecks
 
         public bool AddHealthCheck(HealthCheck healthCheck)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var healtCheckDataItems = healthCheck.HealthCheckDataItems;
+
+                var faunaHealthCheck = _client.Query(
+                    Create(
+                        Collection("healthchecks"),
+                        Obj("data", Encoder.Encode(healthCheck))
+                    )
+                ).Result;
+
+                foreach (var healthCheckDataItem in healtCheckDataItems)
+                {
+                    var _ =_client.Query(
+                        Create(
+                            Collection("dataItems"),
+                            Obj("data",
+                                Obj(
+                                    "healthcheck", faunaHealthCheck.At("ref"),
+                                    "name", healthCheckDataItem.Name,
+                                    "data", healthCheckDataItem.Data
+                                )
+                            )
+                        )
+                    ).Result;
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                return false;
+            }
         }
 
         public ICollection<HealthCheck> GetHealthChecks()

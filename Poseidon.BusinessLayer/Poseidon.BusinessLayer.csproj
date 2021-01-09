@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Flurl.Http" Version="3.0.1" />
     <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="SSH.NET" Version="2016.1.0" />
     <PackageReference Include="YamlDotNet" Version="8.1.2" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Poseidon.Models.Cloud;
+using Poseidon.Models.HealthChecks;
 using Poseidon.Models.Scripts;
 using Poseidon.Models.Security;
 
@@ -25,21 +26,16 @@ namespace Poseidon.Models.Servers
         /// <summary>
         ///     The cloud provider where this server is hosted.
         /// </summary>
-        [NotMapped]
         public CloudProvider CloudProvider
         {
-            get => _cloudProvider;
-            set
-            {
-                _cloudProvider = value;
-                CloudProviderId = _cloudProvider?.Id ?? 0;
-            }
+            get;
+            set;
         }
 
         /// <summary>
-        ///     The cloud provider id.
+        ///     The health check properties.
         /// </summary>
-        public int? CloudProviderId { get; set; }
+        public HealthCheckProperties HealthCheckProperties { get; set; }
 
         /// <summary>
         ///     The id given by Sertar.

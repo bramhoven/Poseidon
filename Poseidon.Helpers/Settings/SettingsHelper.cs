@@ -34,6 +34,11 @@ namespace Poseidon.Helpers.Settings
         public static bool MockDigitalOcean => _configuration.GetValue<bool>("Mocked:DigitalOcean");
 
         /// <summary>
+        ///     The ip address to use when mocked.
+        /// </summary>
+        public static string MockedIpAddress => _configuration.GetValue<string>("Mocked:Configuration:IpAddress");
+
+        /// <summary>
         ///     Gets whether ovh should be mocked.
         /// </summary>
         public static bool MockOvh => _configuration.GetValue<bool>("Mocked:Ovh");

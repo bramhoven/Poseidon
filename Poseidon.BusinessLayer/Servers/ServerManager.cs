@@ -96,8 +96,6 @@ namespace Poseidon.BusinessLayer.Servers
         public Server GetServer(string id)
         {
             var server = _serverDal.GetServer(Guid.Parse(id));
-            if(server.CloudProviderId != null && server.CloudProviderId > 0)
-                server.CloudProvider = _cloudProviderManager.GetCloudProvider(server.CloudProviderId ?? 0);
             return server;
         }
 
@@ -109,8 +107,6 @@ namespace Poseidon.BusinessLayer.Servers
         public Server GetServerByCloudId(string cloudId)
         {
             var server = _serverDal.GetServerByCloudId(cloudId);
-            if (server.CloudProviderId != null && server.CloudProviderId > 0)
-                server.CloudProvider = _cloudProviderManager.GetCloudProvider(server.CloudProviderId ?? 0);
             return server;
         }
 
@@ -121,9 +117,6 @@ namespace Poseidon.BusinessLayer.Servers
         public ICollection<Server> GetServers()
         {
             var servers = _serverDal.GetServers();
-            foreach (var server in servers)
-                if (server.CloudProviderId != null && server.CloudProviderId > 0)
-                    server.CloudProvider = _cloudProviderManager.GetCloudProvider(server.CloudProviderId ?? 0);
             return servers;
         }
 

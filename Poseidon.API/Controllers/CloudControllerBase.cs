@@ -75,8 +75,8 @@ namespace Poseidon.Api.Controllers
                     serverCreateData.Region, serverCreateData.SshKeyId);
                 if (server != null)
                 {
-                    ServerManager.InsertServer(server);
-                    return Ok(server);
+                    if(ServerManager.InsertServer(server))
+                        return Ok(server);
                 }
             }
             catch (Exception e)

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poseidon.DataLayer.Contexts.ServerContext;
 
 namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
 {
     [DbContext(typeof(MysqlServerContext))]
-    partial class MysqlServerContextModelSnapshot : ModelSnapshot
+    [Migration("20210109182836_AddHealthCheckProperties")]
+    partial class AddHealthCheckProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

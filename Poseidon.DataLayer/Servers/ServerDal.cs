@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using NLog;
 using Poseidon.DataLayer.Contexts.ServerContext;
 using Poseidon.Models.Servers;
@@ -42,6 +43,15 @@ namespace Poseidon.DataLayer.Servers
         {
             try
             {
+                if (server.IpAddresses != null)
+                    _serverContext.IpAddresses.RemoveRange(server.IpAddresses);
+
+                if (server.PublicSshKey != null)
+                    _serverContext.PublicSshKeys.Remove(server.PublicSshKey);
+
+                if (server.HealthCheckProperties != null)
+                    _serverContext.HealthCheckProperties.Remove(server.HealthCheckProperties);
+
                 _serverContext.Servers.Remove(server);
                 _serverContext.SaveChanges();
                 return true;
@@ -57,7 +67,12 @@ namespace Poseidon.DataLayer.Servers
         {
             try
             {
-                return _serverContext.Servers.FirstOrDefault(server => server.Id == id);
+                return _serverContext.Servers
+                    .Include(s => s.HealthCheckProperties)
+                    .Include(s => s.PublicSshKey)
+                    .Include(s => s.CloudProvider)
+                    .Include(s => s.IpAddresses)
+                    .FirstOrDefault(server => server.Id == id);
             }
             catch (Exception e)
             {
@@ -70,7 +85,12 @@ namespace Poseidon.DataLayer.Servers
         {
             try
             {
-                return _serverContext.Servers.FirstOrDefault(server => server.CloudId.Equals(cloudId));
+                return _serverContext.Servers
+                    .Include(s => s.HealthCheckProperties)
+                    .Include(s => s.PublicSshKey)
+                    .Include(s => s.CloudProvider)
+                    .Include(s => s.IpAddresses)
+                    .FirstOrDefault(server => server.CloudId.Equals(cloudId));
             }
             catch (Exception e)
             {
@@ -86,13 +106,21 @@ namespace Poseidon.DataLayer.Servers
 
         public ICollection<Server> GetServers()
         {
-            return _serverContext.Servers.ToList();
+            return _serverContext.Servers
+                .Include(s => s.HealthCheckProperties)
+                .Include(s => s.PublicSshKey)
+                .Include(s => s.CloudProvider)
+                .Include(s => s.IpAddresses)
+                .ToList();
         }
 
         public bool InsertServer(Server server)
         {
             try
             {
+                if (server.CloudProvider != null)
+                    _serverContext.CloudProviders.Attach(server.CloudProvider);
+
                 _serverContext.Servers.Add(server);
                 _serverContext.SaveChanges();
                 return true;

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Poseidon.Helpers.Settings;
 using Poseidon.Models.Cloud;
+using Poseidon.Models.Enums;
+using Poseidon.Models.HealthChecks;
 using Poseidon.Models.Security;
 using Poseidon.Models.Servers;
 
@@ -36,12 +39,32 @@ namespace Poseidon.DataLayer.Cloud
 
         public Server CreateServer(string name, string size, string image, string region, string sshKeyId)
         {
+            var ipAddress = new IpAddress
+            {
+                Gateway = "10.10.10.10",
+                Id = Guid.NewGuid(),
+                Ip = SettingsHelper.MockedIpAddress,
+                Name = "Ip Address",
+                Netmask = "255.255.255.255",
+                Version = 4
+            };
+
             var server = new Server
             {
                 CloudId = Guid.NewGuid().ToString(),
                 Id = Guid.NewGuid(),
                 Name = name,
-                CloudProvider = _cloudProvider
+                CloudProvider = _cloudProvider,
+                IpAddresses = new List<IpAddress>
+                {
+                    ipAddress
+                },
+                MainIpAddress = ipAddress.Ip,
+                HealthCheckProperties = new HealthCheckProperties()
+                {
+                    Protocol = ProtocolType.Http,
+                    HealthCheckPath = "/healthcheck"
+                }
             };
 
             MockedServerDatabase.Add(server);
