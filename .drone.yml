@@ -22,7 +22,8 @@ steps:
         from_secret: DO_DOCKER_USERNAME
     password:
         from_secret: DO_DOCKER_PASSWORD
-    repo: poseidon-container-registry/poseidon
+    repo: 
+        from_secret: DO_DOCKER_REPO
     context: Poseidon.API
     dockerfile: Poseidon.API/Dockerfile
 - name: publish_docker
