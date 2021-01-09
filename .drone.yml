@@ -16,6 +16,8 @@ steps:
   when:
     branch: main
   settings:
+    registry:
+        from_secret: DOCKER_REGISTRY
     username:
         from_secret: DOCKER_USERNAME
     password:
