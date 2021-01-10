@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
+using Poseidon.Api.Models;
 using Poseidon.BusinessLayer.HealthChecks;
 using Poseidon.BusinessLayer.Servers;
 using Poseidon.DataLayer.Cloud;
@@ -46,6 +47,7 @@ namespace Poseidon.Api.Controllers
         /// <summary>
         ///     Runs a health check.
         /// </summary>
+        /// <param name="serverId">The server id</param>
         /// <returns></returns>
         [Route("{serverId}")]
         [HttpPost]
@@ -64,6 +66,27 @@ namespace Poseidon.Api.Controllers
             }
 
             return BadRequest(new {Message = "Failed to run health check"});
+        }
+
+        /// <summary>
+        ///     Query the health checks.
+        /// </summary>
+        /// <param name="query">The query</param>
+        /// <returns></returns>
+        [Route("query")]
+        [HttpGet]
+        public ActionResult<object> QueryHealthChecks(string query)
+        {
+            try
+            {
+                var healthChecks = _healthCheckManager.QueryHealthChecks(query);
+
+                return Ok(healthChecks);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorMessage(e.Message));
+            }
         }
 
         /// <summary>

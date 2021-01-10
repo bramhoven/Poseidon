@@ -6,6 +6,7 @@ using FaunaDB.Types;
 using NLog;
 using Poseidon.Helpers.Settings;
 using Poseidon.Models.HealthChecks;
+using Poseidon.Models.QueryLanguage.DataRepresentation;
 using static FaunaDB.Query.Language;
 
 namespace Poseidon.DataLayer.HealthChecks

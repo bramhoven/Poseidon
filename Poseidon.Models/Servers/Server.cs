@@ -10,12 +10,6 @@ namespace Poseidon.Models.Servers
 {
     public class Server
     {
-        #region Fields
-
-        private CloudProvider _cloudProvider;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
@@ -34,7 +28,7 @@ namespace Poseidon.Models.Servers
         public HealthCheckProperties HealthCheckProperties { get; set; }
 
         /// <summary>
-        ///     The id given by Sertar.
+        ///     The id given by Poseidon.
         /// </summary>
         public Guid? Id { get; set; }
 

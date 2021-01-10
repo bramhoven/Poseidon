@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Poseidon.Models.HealthChecks;
+using Poseidon.Models.QueryLanguage.DataRepresentation;
 
 namespace Poseidon.DataLayer.HealthChecks
 {

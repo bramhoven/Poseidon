@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Flurl;
 using Flurl.Http;
 using NLog;
+using Poseidon.BusinessLayer.QueryLanguage;
 using Poseidon.BusinessLayer.Servers;
 using Poseidon.DataLayer.Cloud;
 using Poseidon.DataLayer.HealthChecks;
 using Poseidon.DataLayer.Servers;
 using Poseidon.Models.Enums;
 using Poseidon.Models.HealthChecks;
+using Poseidon.Models.QueryLanguage.DataRepresentation;
 using Poseidon.Models.Servers;
 
 namespace Poseidon.BusinessLayer.HealthChecks
@@ -20,6 +23,7 @@ namespace Poseidon.BusinessLayer.HealthChecks
         #region Fields
 
         private readonly IHealthCheckDal _healthCheckDal;
+        private readonly QueryLanguageManager _queryLanguageManager;
         private readonly ServerManager _serverManager;
 
         #endregion
@@ -43,6 +47,7 @@ namespace Poseidon.BusinessLayer.HealthChecks
         {
             _healthCheckDal = healthCheckDal;
             _serverManager = new ServerManager(serverDal, cloudProviderDal);
+            _queryLanguageManager = new QueryLanguageManager();
         }
 
         #endregion
@@ -93,6 +98,62 @@ namespace Poseidon.BusinessLayer.HealthChecks
             {
                 Logger.Error(e);
                 return new List<HealthCheck>();
+            }
+        }
+
+        /// <summary>
+        ///     Query the health checks
+        /// </summary>
+        /// <param name="query">The query</param>
+        /// <param name="includeServers">Whether to include the server object in the response</param>
+        /// <returns></returns>
+        public ICollection<HealthCheck> QueryHealthChecks(string query, bool includeServers = true)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                throw new ArgumentException(nameof(query));
+
+            try
+            {
+                var queryModel = _queryLanguageManager.ParseQuery(query);
+                IEnumerable<HealthCheck> healthChecks = _healthCheckDal.GetHealthChecks();
+
+                foreach (var comparisonCondition in queryModel.ComparisonConditions)
+                { 
+                    switch (comparisonCondition.Operator)
+                    {
+                        case DslOperator.NotEquals:
+                            healthChecks = healthChecks.Where(h =>
+                                !float.Parse(comparisonCondition.Value).Equals(h.DataItems.FirstOrDefault(d => d.Name.Equals(comparisonCondition.DataItemName))?.Data));
+                            break;
+                        case DslOperator.Equals:
+                            healthChecks = healthChecks.Where(h =>
+                                float.Parse(comparisonCondition.Value).Equals(h.DataItems.FirstOrDefault(d => d.Name.Equals(comparisonCondition.DataItemName))?.Data));
+                            break;
+                        case DslOperator.GreaterThan: 
+                            healthChecks = healthChecks.Where(h =>
+                                float.Parse(comparisonCondition.Value) < h.DataItems.FirstOrDefault(d => d.Name.Equals(comparisonCondition.DataItemName))?.Data);
+                            break;
+                        case DslOperator.GreaterEquals:
+                            healthChecks = healthChecks.Where(h =>
+                                float.Parse(comparisonCondition.Value) <= h.DataItems.FirstOrDefault(d => d.Name.Equals(comparisonCondition.DataItemName))?.Data);
+                            break;
+                        case DslOperator.LessThan:
+                            healthChecks = healthChecks.Where(h =>
+                                float.Parse(comparisonCondition.Value) > h.DataItems.FirstOrDefault(d => d.Name.Equals(comparisonCondition.DataItemName))?.Data);
+                            break;
+                        case DslOperator.LessEquals:
+                            healthChecks = healthChecks.Where(h =>
+                                float.Parse(comparisonCondition.Value) >= h.DataItems.FirstOrDefault(d => d.Name.Equals(comparisonCondition.DataItemName))?.Data);
+                            break;
+                    }
+                }
+
+                return healthChecks.ToList();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                throw e;
             }
         }
 
