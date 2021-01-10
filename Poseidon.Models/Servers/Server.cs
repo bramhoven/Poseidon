@@ -26,11 +26,7 @@ namespace Poseidon.Models.Servers
         /// <summary>
         ///     The cloud provider where this server is hosted.
         /// </summary>
-        public CloudProvider CloudProvider
-        {
-            get;
-            set;
-        }
+        public CloudProvider CloudProvider { get; set; }
 
         /// <summary>
         ///     The health check properties.
@@ -72,6 +68,11 @@ namespace Poseidon.Models.Servers
         ///     The public ssh keys connected to this server.
         /// </summary>
         public PublicSshKey PublicSshKey { get; set; }
+
+        /// <summary>
+        ///     Gets the status of the server.
+        /// </summary>
+        public ServerStatus Status { get; set; }
 
         #endregion
     }

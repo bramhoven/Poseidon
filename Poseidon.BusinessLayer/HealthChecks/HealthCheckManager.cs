@@ -106,7 +106,6 @@ namespace Poseidon.BusinessLayer.HealthChecks
             try
             {
                 Stopwatch stopwatch = new Stopwatch();
-
                 var healthCheckProperties = server.HealthCheckProperties;
 
                 ICollection<HealthCheckDataItem> healthCheckDataItems = null;
@@ -119,17 +118,30 @@ namespace Poseidon.BusinessLayer.HealthChecks
 
                     var baseUrl = $"{protocol}://{server.MainIpAddress}";
 
-                    stopwatch.Start();
-                    var dataItems = baseUrl.AppendPathSegment(healthCheckProperties.HealthCheckPath)
-                        .GetJsonAsync<HealthCheckDataItem[]>().Result;
-                    stopwatch.Stop();
-
-                    healthCheckDataItems = dataItems.ToList();
+                    try
+                    {
+                        healthCheckDataItems = ExecuteHealthCheck(baseUrl, healthCheckProperties, ref stopwatch);
+                    }
+                    catch (FlurlHttpTimeoutException)
+                    {
+                        server.Status = ServerStatus.Offline;
+                    }
+                    catch (FlurlHttpException)
+                    {
+                        server.Status = ServerStatus.Failing;
+                    }
                 }
+
+                if ((int) stopwatch.ElapsedMilliseconds <= 500)
+                    server.Status = ServerStatus.Running;
+                if ((int) stopwatch.ElapsedMilliseconds > 500)
+                    server.Status = ServerStatus.Slow;
+
+                _serverManager.UpdateServer(server);
 
                 if (healthCheckDataItems != null)
                 {
-                    var healthCheck = new HealthCheck()
+                    var healthCheck = new HealthCheck
                     {
                         Date = DateTime.Now,
                         DataItems = healthCheckDataItems,
@@ -161,6 +173,40 @@ namespace Poseidon.BusinessLayer.HealthChecks
 
             return result;
         }
+
+        #region Static Methods
+
+        /// <summary>
+        ///     Executes and times the health check
+        /// </summary>
+        /// <param name="baseUrl"></param>
+        /// <param name="healthCheckProperties"></param>
+        /// <param name="stopwatch"></param>
+        /// <returns></returns>
+        private static ICollection<HealthCheckDataItem> ExecuteHealthCheck(string baseUrl,
+            HealthCheckProperties healthCheckProperties, ref Stopwatch stopwatch)
+        {
+            HealthCheckDataItem[] dataItems;
+
+            try
+            {
+                stopwatch.Start();
+                dataItems = baseUrl.AppendPathSegment(healthCheckProperties.HealthCheckPath)
+                    .GetJsonAsync<HealthCheckDataItem[]>().Result;
+            }
+            catch (FlurlHttpException e)
+            {
+                throw e;
+            }
+            finally
+            {
+                stopwatch.Stop();
+            }
+
+            return dataItems.ToList();
+        }
+
+        #endregion
 
         #endregion
     }

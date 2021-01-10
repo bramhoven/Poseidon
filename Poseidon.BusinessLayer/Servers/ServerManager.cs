@@ -127,6 +127,7 @@ namespace Poseidon.BusinessLayer.Servers
         /// <returns></returns>
         public bool InsertServer(Server server)
         {
+            server.Status = ServerStatus.Unknown;
             return _serverDal.InsertServer(server);
         }
 
