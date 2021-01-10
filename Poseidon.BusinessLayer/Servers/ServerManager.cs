@@ -13,9 +13,9 @@ namespace Poseidon.BusinessLayer.Servers
         #region Fields
 
         /// <summary>
-        ///     The cloud provider dal.
+        ///     The cloud provider manager.
         /// </summary>
-        private readonly ICloudProviderDal _cloudProviderDal;
+        private readonly CloudProviderManager _cloudProviderManager;
 
         /// <summary>
         ///     The logger.
@@ -39,7 +39,7 @@ namespace Poseidon.BusinessLayer.Servers
         public ServerManager(IServerDal serverDal, ICloudProviderDal cloudProviderDal)
         {
             _serverDal = serverDal;
-            _cloudProviderDal = cloudProviderDal;
+            _cloudProviderManager = new CloudProviderManager(cloudProviderDal);
         }
 
         #endregion
@@ -96,8 +96,6 @@ namespace Poseidon.BusinessLayer.Servers
         public Server GetServer(string id)
         {
             var server = _serverDal.GetServer(Guid.Parse(id));
-            if(server.CloudProviderId != null && server.CloudProviderId > 0)
-                server.CloudProvider = _cloudProviderDal.GetCloudProvider(server.CloudProviderId ?? 0);
             return server;
         }
 
@@ -109,8 +107,6 @@ namespace Poseidon.BusinessLayer.Servers
         public Server GetServerByCloudId(string cloudId)
         {
             var server = _serverDal.GetServerByCloudId(cloudId);
-            if (server.CloudProviderId != null && server.CloudProviderId > 0)
-                server.CloudProvider = _cloudProviderDal.GetCloudProvider(server.CloudProviderId ?? 0);
             return server;
         }
 
@@ -121,9 +117,6 @@ namespace Poseidon.BusinessLayer.Servers
         public ICollection<Server> GetServers()
         {
             var servers = _serverDal.GetServers();
-            foreach (var server in servers)
-                if (server.CloudProviderId != null && server.CloudProviderId > 0)
-                    server.CloudProvider = _cloudProviderDal.GetCloudProvider(server.CloudProviderId ?? 0);
             return servers;
         }
 
@@ -134,6 +127,7 @@ namespace Poseidon.BusinessLayer.Servers
         /// <returns></returns>
         public bool InsertServer(Server server)
         {
+            server.Status = ServerStatus.Unknown;
             return _serverDal.InsertServer(server);
         }
 

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poseidon.DataLayer.Contexts.ServerContext;
 
 namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
 {
     [DbContext(typeof(MysqlServerContext))]
-    partial class MysqlServerContextModelSnapshot : ModelSnapshot
+    [Migration("20210109182836_AddHealthCheckProperties")]
+    partial class AddHealthCheckProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,12 +138,7 @@ namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
                     b.Property<string>("PublicSshKeyId")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CloudProviderId");
 
                     b.HasIndex("HealthCheckPropertiesId");
 
@@ -166,10 +163,6 @@ namespace Poseidon.Migrations.Mysql.Migrations.MysqlServer
 
             modelBuilder.Entity("Poseidon.Models.Servers.Server", b =>
                 {
-                    b.HasOne("Poseidon.Models.Cloud.CloudProvider", "CloudProvider")
-                        .WithMany()
-                        .HasForeignKey("CloudProviderId");
-
                     b.HasOne("Poseidon.Models.HealthChecks.HealthCheckProperties", "HealthCheckProperties")
                         .WithMany()
                         .HasForeignKey("HealthCheckPropertiesId");

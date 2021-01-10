@@ -1,8 +1,11 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
+using Poseidon.Api.Models;
+using Poseidon.BusinessLayer.HealthChecks;
 using Poseidon.BusinessLayer.Servers;
 using Poseidon.DataLayer.Cloud;
+using Poseidon.DataLayer.HealthChecks;
 using Poseidon.DataLayer.Servers;
 
 namespace Poseidon.Api.Controllers
@@ -12,6 +15,8 @@ namespace Poseidon.Api.Controllers
     public class ServerController : ControllerBase
     {
         #region Fields
+
+        protected readonly HealthCheckManager HealthCheckManager;
 
         protected readonly ServerManager ServerManager;
 
@@ -25,9 +30,17 @@ namespace Poseidon.Api.Controllers
 
         #region Constructors
 
-        public ServerController(IServerDal serverDal, ICloudProviderDal cloudProviderDal)
+        /// <summary>
+        ///     Initializes a new instance of <see cref="ServerController" />
+        /// </summary>
+        /// <param name="serverDal">The server dal</param>
+        /// <param name="cloudProviderDal">The cloud provider dal</param>
+        /// <param name="healthCheckDal">The health check dal</param>
+        public ServerController(IServerDal serverDal, ICloudProviderDal cloudProviderDal,
+            IHealthCheckDal healthCheckDal)
         {
             ServerManager = new ServerManager(serverDal, cloudProviderDal);
+            HealthCheckManager = new HealthCheckManager(healthCheckDal, serverDal, cloudProviderDal);
         }
 
         #endregion
@@ -53,7 +66,7 @@ namespace Poseidon.Api.Controllers
                 Logger.Error(e);
             }
 
-            return BadRequest(new {Message = "Failed to delete server"});
+            return BadRequest(new ErrorMessage("Failed to delete server"));
         }
 
         /// <summary>
@@ -76,7 +89,34 @@ namespace Poseidon.Api.Controllers
                 Logger.Error(e);
             }
 
-            return BadRequest(new {Message = "Failed to get server"});
+            return BadRequest(new ErrorMessage("Failed to get server"));
+        }
+
+        /// <summary>
+        ///     Get all health checks for a server.
+        /// </summary>
+        /// <returns></returns>
+        [Route("{serverId}/healthchecks")]
+        [HttpGet]
+        public ActionResult<object> GetServerHealtChecks(string serverId)
+        {
+            try
+            {
+                var server = ServerManager.GetServer(serverId);
+                if (server != null)
+                {
+                    var healthChecks = HealthCheckManager.GetHealthChecks(server, false);
+                    return Ok(healthChecks);
+                }
+
+                return BadRequest(new ErrorMessage("Cannot get server for specified id"));
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+            return BadRequest(new ErrorMessage("Cannot get health checks for server"));
         }
 
         /// <summary>
@@ -93,7 +133,7 @@ namespace Poseidon.Api.Controllers
             catch (Exception e)
             {
                 Logger.Error(e);
-                return BadRequest(new {e.Message});
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
 
