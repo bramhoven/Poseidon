@@ -115,7 +115,7 @@ namespace Poseidon.BusinessLayer.HealthChecks
             try
             {
                 var queryModel = _queryLanguageManager.ParseQuery(query);
-                IEnumerable<HealthCheck> healthChecks = _healthCheckDal.GetHealthChecks();
+                IEnumerable<HealthCheck> healthChecks = _healthCheckDal.GetLatestHealthChecks();
 
                 foreach (var comparisonCondition in queryModel.ComparisonConditions)
                 { 
@@ -147,6 +147,10 @@ namespace Poseidon.BusinessLayer.HealthChecks
                             break;
                     }
                 }
+
+                if (includeServers)
+                    foreach (var healthCheck in healthChecks)
+                        healthCheck.Server = _serverManager.GetServer(healthCheck.ServerId);
 
                 return healthChecks.ToList();
             }

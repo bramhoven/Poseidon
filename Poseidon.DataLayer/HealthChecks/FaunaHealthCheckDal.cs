@@ -6,7 +6,6 @@ using FaunaDB.Types;
 using NLog;
 using Poseidon.Helpers.Settings;
 using Poseidon.Models.HealthChecks;
-using Poseidon.Models.QueryLanguage.DataRepresentation;
 using static FaunaDB.Query.Language;
 
 namespace Poseidon.DataLayer.HealthChecks
@@ -21,7 +20,11 @@ namespace Poseidon.DataLayer.HealthChecks
 
         #endregion
 
+        #region Properties
+
         private ILogger Logger => LogManager.GetCurrentClassLogger();
+
+        #endregion
 
         #region Constructors
 
@@ -54,7 +57,7 @@ namespace Poseidon.DataLayer.HealthChecks
 
                 foreach (var healthCheckDataItem in healtCheckDataItems)
                 {
-                    var _ =_client.Query(
+                    var _ = _client.Query(
                         Create(
                             Collection("dataItems"),
                             Obj("data",
@@ -175,6 +178,14 @@ namespace Poseidon.DataLayer.HealthChecks
             }
 
             return healthChecks.OrderBy(healthCheck => healthCheck.Date).ToList();
+        }
+
+        public ICollection<HealthCheck> GetLatestHealthChecks()
+        {
+            return GetHealthChecks()
+                .GroupBy(h => h.ServerId)
+                .Select(g => g.OrderByDescending(h => h.Date).First())
+                .ToList();
         }
 
         #endregion

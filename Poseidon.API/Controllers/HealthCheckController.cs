@@ -75,11 +75,11 @@ namespace Poseidon.Api.Controllers
         /// <returns></returns>
         [Route("query")]
         [HttpGet]
-        public ActionResult<object> QueryHealthChecks(string query)
+        public ActionResult<object> QueryHealthChecks(string query, bool includeServers = true)
         {
             try
             {
-                var healthChecks = _healthCheckManager.QueryHealthChecks(query);
+                var healthChecks = _healthCheckManager.QueryHealthChecks(query, includeServers);
 
                 return Ok(healthChecks);
             }
