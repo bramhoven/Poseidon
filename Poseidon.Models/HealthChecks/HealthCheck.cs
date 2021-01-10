@@ -16,9 +16,15 @@ namespace Poseidon.Models.HealthChecks
         #region Properties
 
         /// <summary>
+        ///     The date at which this health check was performed.
+        /// </summary>
+        [FaunaField("date")]
+        public DateTime Date { get; set; }
+
+        /// <summary>
         ///     The health check custom data items.
         /// </summary
-        public ICollection<HealthCheckDataItem> HealthCheckDataItems { get; set; }
+        public ICollection<HealthCheckDataItem> DataItems { get; set; }
 
         /// <summary>
         ///     The id of the health check.

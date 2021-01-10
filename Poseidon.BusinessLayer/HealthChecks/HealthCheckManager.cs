@@ -73,6 +73,30 @@ namespace Poseidon.BusinessLayer.HealthChecks
         }
 
         /// <summary>
+        ///     Get health checks for server.
+        /// </summary>
+        /// <param name="server">The server to get the checks for</param>
+        /// <param name="includeServers">Whether to include the server object in the response</param>
+        /// <returns></returns>
+        public ICollection<HealthCheck> GetHealthChecks(Server server, bool includeServers = true)
+        {
+            try
+            {
+                var healthChecks = _healthCheckDal.GetHealthChecks(server.Id.ToString());
+                if (includeServers)
+                    foreach (var healthCheck in healthChecks)
+                        healthCheck.Server = _serverManager.GetServer(healthCheck.ServerId);
+
+                return healthChecks;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                return new List<HealthCheck>();
+            }
+        }
+
+        /// <summary>
         ///     Runs a health check for the specified server.
         /// </summary>
         /// <param name="server"></param>
@@ -89,8 +113,14 @@ namespace Poseidon.BusinessLayer.HealthChecks
                 if (healthCheckProperties.Protocol == ProtocolType.Http ||
                     healthCheckProperties.Protocol == ProtocolType.Https)
                 {
+                    var protocol = "http";
+                    if (healthCheckProperties.Protocol == ProtocolType.Https)
+                        protocol = "https";
+
+                    var baseUrl = $"{protocol}://{server.MainIpAddress}";
+
                     stopwatch.Start();
-                    var dataItems = server.MainIpAddress.AppendPathSegment(healthCheckProperties.HealthCheckPath)
+                    var dataItems = baseUrl.AppendPathSegment(healthCheckProperties.HealthCheckPath)
                         .GetJsonAsync<HealthCheckDataItem[]>().Result;
                     stopwatch.Stop();
 
@@ -101,7 +131,8 @@ namespace Poseidon.BusinessLayer.HealthChecks
                 {
                     var healthCheck = new HealthCheck()
                     {
-                        HealthCheckDataItems = healthCheckDataItems,
+                        Date = DateTime.Now,
+                        DataItems = healthCheckDataItems,
                         ResponseTime = (int) stopwatch.ElapsedMilliseconds,
                         Server = server
                     };
@@ -114,6 +145,21 @@ namespace Poseidon.BusinessLayer.HealthChecks
             }
 
             return false;
+        }
+
+        /// <summary>
+        ///     Runs a health checks for all servers.
+        /// </summary>
+        /// <returns></returns>
+        public bool RunHealthChecks()
+        {
+            var servers = _serverManager.GetServers();
+
+            var result = true;
+            foreach (var server in servers)
+                result = result && RunHealthCheck(server);
+
+            return result;
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace Poseidon.Models.HealthChecks
         ///     Gets the data.
         /// </summary>
         [FaunaField("data")]
-        public int Data { get; set; }
+        public float Data { get; set; }
 
         /// <summary>
         ///     The name of this health check data,

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
+using Poseidon.Api.Models;
 using Poseidon.Api.Models.RequestData;
 using Poseidon.API.Models.RequestData;
 using Poseidon.BusinessLayer.Cloud;
@@ -75,7 +76,7 @@ namespace Poseidon.Api.Controllers
                     serverCreateData.Region, serverCreateData.SshKeyId);
                 if (server != null)
                 {
-                    if(ServerManager.InsertServer(server))
+                    if (ServerManager.InsertServer(server))
                         return Ok(server);
                 }
             }
@@ -84,7 +85,7 @@ namespace Poseidon.Api.Controllers
                 Logger.Error(e);
             }
 
-            return BadRequest(new {Message = "Failed to create server", errors});
+            return BadRequest(new ErrorMessage("Failed to create server", errors));
         }
 
         /// <summary>
@@ -100,8 +101,8 @@ namespace Poseidon.Api.Controllers
             {
                 var server = ServerManager.GetServerByCloudId(cloudId);
 
-                if(server == null)
-                    return BadRequest(new { Message = $"Failed to delete server with cloud id: {cloudId}" });
+                if (server == null)
+                    return BadRequest(new ErrorMessage($"Failed to delete server with cloud id: {cloudId}"));
 
                 if (ServerManager.DeleteServer(cloudId))
                     return Ok();
@@ -131,7 +132,7 @@ namespace Poseidon.Api.Controllers
                 Logger.Error(e);
             }
 
-            return BadRequest(new {Message = "Failed to update server"});
+            return BadRequest(new ErrorMessage("Failed to update server"));
         }
 
         /// <summary>
@@ -211,7 +212,7 @@ namespace Poseidon.Api.Controllers
                 Logger.Error(e);
             }
 
-            return BadRequest(new {Message = "Failed to get server"});
+            return BadRequest(new ErrorMessage("Failed to get server"));
         }
 
         /// <summary>
@@ -224,11 +225,11 @@ namespace Poseidon.Api.Controllers
         public ActionResult<object> UpdateServer(ServerUpdateData serverUpdateData)
         {
             if (serverUpdateData == null)
-                return BadRequest(new {Message = "No data provided"});
+                return BadRequest(new ErrorMessage("No data provided"));
 
             if (string.IsNullOrWhiteSpace(serverUpdateData.CloudId) &&
                 (serverUpdateData.Id == null || string.IsNullOrWhiteSpace(serverUpdateData.Id)))
-                return BadRequest(new {Message = "No id has been provided"});
+                return BadRequest(new ErrorMessage("No id has been provided"));
 
             try
             {
@@ -245,7 +246,7 @@ namespace Poseidon.Api.Controllers
                 Logger.Error(e);
             }
 
-            return BadRequest(new {Message = "Failed to update server"});
+            return BadRequest(new ErrorMessage("Failed to update server"));
         }
 
         #endregion

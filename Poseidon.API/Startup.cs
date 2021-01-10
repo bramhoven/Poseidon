@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Poseidon.API.Services;
 using Poseidon.BusinessLayer.Cloud;
 using Poseidon.DataLayer.Cloud;
 using Poseidon.DataLayer.Contexts.ServerContext;
@@ -87,6 +88,8 @@ namespace Poseidon.API
             services.AddScoped<IUserDal, UserDal>();
             services.AddScoped<ICloudProviderDal, CloudProviderDal>();
             services.AddScoped<IHealthCheckDal, FaunaHealthCheckDal>();
+
+            services.AddHostedService<HealthCheckBackgroundService>();
 
             services.AddControllers();
         }

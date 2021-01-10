@@ -37,12 +37,17 @@ namespace Poseidon.DataLayer.HealthChecks
         {
             try
             {
-                var healtCheckDataItems = healthCheck.HealthCheckDataItems;
+                var healtCheckDataItems = healthCheck.DataItems;
 
                 var faunaHealthCheck = _client.Query(
                     Create(
                         Collection("healthchecks"),
-                        Obj("data", Encoder.Encode(healthCheck))
+                        Obj("data", Obj(
+                                "date", healthCheck.Date,
+                                "serverId", healthCheck.ServerId,
+                                "responseTime", healthCheck.ResponseTime
+                            )
+                        )
                     )
                 ).Result;
 
@@ -84,6 +89,7 @@ namespace Poseidon.DataLayer.HealthChecks
                             .In(
                                 Obj(
                                     "id", Select(Path("ref", "id"), Var("healthcheck")),
+                                    "date", Select(Path("data", "date"), Var("healthcheck")),
                                     "serverId", Select(Path("data", "serverId"), Var("healthcheck")),
                                     "responseTime", Select(Path("data", "responseTime"), Var("healthcheck")),
                                     "dataItems", Map(
@@ -113,11 +119,61 @@ namespace Poseidon.DataLayer.HealthChecks
             {
                 var healthCheck = value.To<HealthCheck>().Value;
                 var dataItems = value.At("dataItems").At("data").To<HealthCheckDataItem[]>().Value;
-                healthCheck.HealthCheckDataItems = dataItems.ToList();
+                healthCheck.DataItems = dataItems.ToList();
                 healthChecks.Add(healthCheck);
             }
 
-            return healthChecks.ToList();
+            return healthChecks.OrderBy(healthCheck => healthCheck.Date).ToList();
+        }
+
+        public ICollection<HealthCheck> GetHealthChecks(string serverId)
+        {
+            var faunaResult = _client.Query(
+                Map(
+                    Paginate(Match(Index("HealthCheckServerId"), serverId)),
+                    Lambda("healthcheckRef",
+                        Let(
+                                "healthcheck",
+                                Get(Var("healthcheckRef"))
+                            )
+                            .In(
+                                Obj(
+                                    "id", Select(Path("ref", "id"), Var("healthcheck")),
+                                    "date", Select(Path("data", "date"), Var("healthcheck")),
+                                    "serverId", Select(Path("data", "serverId"), Var("healthcheck")),
+                                    "responseTime", Select(Path("data", "responseTime"), Var("healthcheck")),
+                                    "dataItems", Map(
+                                        Paginate(Match(Index("HealthCheckDataItems"), Var("healthcheckRef"))),
+                                        Lambda("dataItemRef",
+                                            Let(
+                                                    "dataItem",
+                                                    Get(Var("dataItemRef"))
+                                                )
+                                                .In(
+                                                    Obj(
+                                                        "name", Select(Path("data", "name"), Var("dataItem")),
+                                                        "data", Select(Path("data", "data"), Var("dataItem"))
+                                                    )
+                                                )
+                                        )
+                                    )
+                                )
+                            )
+                    )
+                )
+            ).Result;
+
+            var faunaValues = faunaResult.At("data").To<Value[]>().Value;
+            var healthChecks = new List<HealthCheck>();
+            foreach (var value in faunaValues)
+            {
+                var healthCheck = value.To<HealthCheck>().Value;
+                var dataItems = value.At("dataItems").At("data").To<HealthCheckDataItem[]>().Value;
+                healthCheck.DataItems = dataItems.ToList();
+                healthChecks.Add(healthCheck);
+            }
+
+            return healthChecks.OrderBy(healthCheck => healthCheck.Date).ToList();
         }
 
         #endregion
