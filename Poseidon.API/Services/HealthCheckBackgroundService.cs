@@ -71,7 +71,7 @@ namespace Poseidon.API.Services
                     Logger.Error(e);
                 }
 
-                await Task.Delay(BackgroundServiceHelper.HealthCheckDelay, stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(BackgroundServiceHelper.HealthCheckDelay), stoppingToken);
             }
 
             Logger.Debug("Health check background service is stopping.");

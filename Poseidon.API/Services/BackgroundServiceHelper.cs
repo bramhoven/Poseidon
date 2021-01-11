@@ -3,8 +3,8 @@
     public static class BackgroundServiceHelper
     {
         /// <summary>
-        /// Gets the delay between health checks in milliseconds.
+        /// Gets the delay between health checks in minutes.
         /// </summary>
-        public static int HealthCheckDelay = 300000; // Every 5 minutes
+        public static int HealthCheckDelay = 30; // Every 30 minutes
     }
 }
