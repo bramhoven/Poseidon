@@ -80,15 +80,15 @@ namespace Poseidon.DataLayer.HealthChecks
             }
         }
 
-        public ICollection<HealthCheck> GetHealthChecks()
+        public ICollection<HealthCheck> GetHealthChecks(int size=100)
         {
             var faunaResult = _client.Query(
                 Map(
-                    Paginate(Match("AllHealthChecks")),
-                    Lambda("healthcheckRef",
+                    Paginate(Match("HealthChecksSortedDesc"), size: size),
+                    Lambda(Arr("date", "ref"),
                         Let(
                                 "healthcheck",
-                                Get(Var("healthcheckRef"))
+                                Get(Var("ref"))
                             )
                             .In(
                                 Obj(
@@ -97,7 +97,7 @@ namespace Poseidon.DataLayer.HealthChecks
                                     "serverId", Select(Path("data", "serverId"), Var("healthcheck")),
                                     "responseTime", Select(Path("data", "responseTime"), Var("healthcheck")),
                                     "dataItems", Map(
-                                        Paginate(Match(Index("HealthCheckDataItems"), Var("healthcheckRef"))),
+                                        Paginate(Match(Index("HealthCheckDataItems"), Var("ref"))),
                                         Lambda("dataItemRef",
                                             Let(
                                                     "dataItem",
@@ -127,18 +127,18 @@ namespace Poseidon.DataLayer.HealthChecks
                 healthChecks.Add(healthCheck);
             }
 
-            return healthChecks.OrderBy(healthCheck => healthCheck.Date).ToList();
+            return healthChecks.OrderBy(healthCheck => healthCheck.Date).OrderBy(healthCheck => healthCheck.ServerId).ToList();
         }
 
         public ICollection<HealthCheck> GetHealthChecks(string serverId)
         {
             var faunaResult = _client.Query(
                 Map(
-                    Paginate(Match(Index("HealthCheckServerId"), serverId)),
-                    Lambda("healthcheckRef",
+                    Paginate(Match(Index("HealthChecksServerIdSortedDesc"), serverId), size: 100),
+                    Lambda(Arr("date", "ref"),
                         Let(
                                 "healthcheck",
-                                Get(Var("healthcheckRef"))
+                                Get(Var("ref"))
                             )
                             .In(
                                 Obj(
@@ -147,7 +147,7 @@ namespace Poseidon.DataLayer.HealthChecks
                                     "serverId", Select(Path("data", "serverId"), Var("healthcheck")),
                                     "responseTime", Select(Path("data", "responseTime"), Var("healthcheck")),
                                     "dataItems", Map(
-                                        Paginate(Match(Index("HealthCheckDataItems"), Var("healthcheckRef"))),
+                                        Paginate(Match(Index("HealthCheckDataItems"), Var("ref"))),
                                         Lambda("dataItemRef",
                                             Let(
                                                     "dataItem",
@@ -178,14 +178,6 @@ namespace Poseidon.DataLayer.HealthChecks
             }
 
             return healthChecks.OrderBy(healthCheck => healthCheck.Date).ToList();
-        }
-
-        public ICollection<HealthCheck> GetLatestHealthChecks()
-        {
-            return GetHealthChecks()
-                .GroupBy(h => h.ServerId)
-                .Select(g => g.OrderByDescending(h => h.Date).First())
-                .ToList();
         }
 
         #endregion

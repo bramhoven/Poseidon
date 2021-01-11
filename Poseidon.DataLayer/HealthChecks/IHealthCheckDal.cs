@@ -18,14 +18,9 @@ namespace Poseidon.DataLayer.HealthChecks
         /// <summary>
         ///     Get all health checks from the database.
         /// </summary>
+        /// <param name="size">The amount of health checks</param>
         /// <returns></returns>
-        ICollection<HealthCheck> GetHealthChecks();
-
-        /// <summary>
-        ///     Get latest health checks from the database.
-        /// </summary>
-        /// <returns></returns>
-        ICollection<HealthCheck> GetLatestHealthChecks();
+        ICollection<HealthCheck> GetHealthChecks(int size=100);
 
         /// <summary>
         ///     Get all health checks for a specific server from the database.
