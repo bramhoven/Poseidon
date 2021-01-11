@@ -1,13 +1,49 @@
 kind: pipeline
+name: docker-hub
 
 steps:
 - name: build
   image: mcr.microsoft.com/dotnet/sdk:3.1
   environment:
     POSEIDON_SECRETS:
-      from_secret: POSEIDON_SECRETS
+        from_secret: POSEIDON_SECRETS
   commands:
     - cd $(pwd)/Poseidon.API/
+    - dotnet restore
+    - dotnet build
+    - dotnet publish -c Release -o ./bin/
+- name: publish_docker
+  image: plugins/docker
+  when:
+    branch: main
+  settings:
+    registry:
+        from_secret: DOCKER_REGISTRY
+    username:
+        from_secret: DOCKER_USERNAME
+    password:
+        from_secret: DOCKER_PASSWORD
+    repo: bramhoven/poseidon
+    context: Poseidon.API
+    dockerfile: Poseidon.API/Dockerfile
+---
+kind: pipeline
+name: digitalocean
+
+steps:
+- name: build
+  image: mcr.microsoft.com/dotnet/sdk:3.1
+  environment:
+    POSEIDON_SECRETS:
+        from_secret: POSEIDON_SECRETS
+    APPSETTINGS:
+        from_secret: APPSETTINGS
+    NLOG:
+        from_secret: NLOG
+  commands:
+    - cd $(pwd)/Poseidon.API/
+    - $APPSETTINGS > appsettings.json
+    - $NLOG > NLog.config
     - dotnet restore
     - dotnet build
     - dotnet publish -c Release -o ./bin/
@@ -25,18 +61,4 @@ steps:
     repo: 
         from_secret: DO_DOCKER_REPO
     context: Poseidon.API
-    dockerfile: Poseidon.API/Dockerfile
-- name: publish_docker
-  image: plugins/docker
-  when:
-    branch: main
-  settings:
-    registry:
-        from_secret: DOCKER_REGISTRY
-    username:
-        from_secret: DOCKER_USERNAME
-    password:
-        from_secret: DOCKER_PASSWORD
-    repo: bramhoven/poseidon
-    context: Poseidon.API
-    dockerfile: Poseidon.API/Dockerfile
+    dockerfile: Poseidon.API/Dockerfile.do
