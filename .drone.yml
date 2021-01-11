@@ -42,8 +42,8 @@ steps:
         from_secret: NLOG
   commands:
     - cd $(pwd)/Poseidon.API/
-    - $APPSETTINGS > appsettings.json
-    - $NLOG > NLog.config
+    - echo $APPSETTINGS > appsettings.json
+    - echo $NLOG > NLog.config
     - dotnet restore
     - dotnet build
     - dotnet publish -c Release -o ./bin/
